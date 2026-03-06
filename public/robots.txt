@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /admin/
 Disallow: /api/
 Allow: /
+
+Sitemap: https://tsa-youth-week-26.onrender.com/sitemap.xml
