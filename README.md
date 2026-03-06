@@ -42,7 +42,6 @@ Edit `.env` and fill in:
 | `SESSION_SECRET` | Random 64-char string — run `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
 | `ADMIN_EMAIL` | Admin login email |
 | `ADMIN_PASSWORD` | Admin login password |
-| `SITE_URL` | `http://localhost:3000` for dev |
 | `GA_TRACKING_ID` | GA4 Measurement ID (optional) |
 | `GA_PROPERTY_ID` | GA4 Property ID (optional) |
 | `GA_SERVICE_ACCOUNT_JSON` | Service account JSON string (optional) |
@@ -93,7 +92,6 @@ In the Render dashboard → **Environment**, add these manually (marked `sync: f
 |----------|-------|
 | `ADMIN_EMAIL` | your admin email |
 | `ADMIN_PASSWORD` | a strong password |
-| `SITE_URL` | `https://tsa-youth-week-26.onrender.com` (your actual URL) |
 | `GA_TRACKING_ID` | your GA4 ID (optional) |
 | `GA_PROPERTY_ID` | your GA4 property ID (optional) |
 | `GA_SERVICE_ACCOUNT_JSON` | paste full service account JSON as one line (optional) |

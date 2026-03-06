@@ -39,8 +39,8 @@ services:
       - key: ADMIN_PASSWORD
         sync: false
 
-      - key: SITE_URL
-        sync: false           # e.g. https://tsa-youth-week-26.onrender.com
+      # SITE_URL not needed — the app derives it dynamically from the request
+      # (req.protocol + req.get('host')), so it works on any host automatically.
 
       # ── Google Analytics (optional) ───────────────────────────────────────
       - key: GA_TRACKING_ID

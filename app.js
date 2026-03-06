@@ -24,6 +24,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Trust proxy in production (for secure cookies behind reverse proxy)
+// Render (and most PaaS) terminate SSL at their edge — trust one hop
 if (process.env.NODE_ENV === 'production') app.set('trust proxy', 1);
 
 // ── Security: Remove fingerprinting header ──
@@ -71,7 +72,9 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: '7d' }));
 app.use('/images', express.static(path.join(__dirname, 'assets', 'images'), { maxAge: '7d' }));
 
 // ── Session ──
-const useSecureCookie = (process.env.SITE_URL || '').startsWith('https');
+// Secure cookies whenever running in production (behind HTTPS proxy).
+// req.secure / req.protocol already reflect https because trust proxy is set above.
+const useSecureCookie = process.env.NODE_ENV === 'production';
 app.use(session({
   store: new FileStore({
     path: path.join(__dirname, 'data', 'sessions'),
@@ -127,10 +130,10 @@ function formRateLimit(req, res, next) {
 // Make common vars available to all views
 app.use((req, res, next) => {
   res.locals.gaId = process.env.GA_TRACKING_ID || '';
-  // Dynamic siteUrl: derive from the actual request host
-  res.locals.siteUrl = process.env.SITE_URL && process.env.SITE_URL !== 'http://localhost:3000'
-    ? process.env.SITE_URL.replace(/\/+$/, '')
-    : req.protocol + '://' + req.get('host');
+  // Dynamic siteUrl: always derived from the live request so it works
+  // correctly on every host — local dev, staging, and production alike.
+  // (Express's 'trust proxy' ensures req.protocol is 'https' on Render.)
+  res.locals.siteUrl = req.protocol + '://' + req.get('host');
   // CSRF token — generate if not present, keep stable per session
   if (req.session) ensureCsrfToken(req.session);
   res.locals.csrfToken = (req.session && req.session._csrf) || '';
