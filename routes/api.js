@@ -9,10 +9,10 @@ function requireAuth(req, res, next) {
 }
 
 // Get registration count (protected)
-router.get('/stats', requireAuth, (req, res) => {
+router.get('/stats', requireAuth, async (req, res) => {
   res.json({
-    registrations: store.count('registrations'),
-    contacts: store.count('contacts')
+    registrations: await store.count('registrations'),
+    contacts: await store.count('contacts')
   });
 });
 

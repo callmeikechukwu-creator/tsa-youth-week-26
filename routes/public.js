@@ -69,7 +69,7 @@ router.get('/join', (req, res) => {
 });
 
 // Join (POST — registration)
-router.post('/join', csrfCheck, (req, res) => {
+router.post('/join', csrfCheck, async (req, res) => {
   let { name, email, age, church, role, heard } = req.body;
 
   // Sanitize: strip tags, trim, enforce max lengths
@@ -88,7 +88,7 @@ router.post('/join', csrfCheck, (req, res) => {
     return res.status(400).json({ ok: false, message: 'Please enter a valid email address.' });
   }
 
-  const entry = store.add('registrations', { name, email, age, church, role, heard });
+  const entry = await store.add('registrations', { name, email, age, church, role, heard });
   res.json({ ok: true, message: 'Registration successful!', id: entry.id, name: entry.name });
 });
 
@@ -102,7 +102,7 @@ router.get('/contact', (req, res) => {
 });
 
 // Contact (POST)
-router.post('/contact', csrfCheck, (req, res) => {
+router.post('/contact', csrfCheck, async (req, res) => {
   let { name, email, phone, subject, message } = req.body;
 
   // Sanitize & enforce max lengths
@@ -119,7 +119,7 @@ router.post('/contact', csrfCheck, (req, res) => {
     return res.status(400).json({ ok: false, message: 'Please enter a valid email address.' });
   }
 
-  const entry = store.add('contacts', { name, email, phone, subject, message });
+  const entry = await store.add('contacts', { name, email, phone, subject, message });
   res.json({ ok: true, message: 'Message sent successfully!', id: entry.id, name: entry.name });
 });
 

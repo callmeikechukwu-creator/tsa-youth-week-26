@@ -84,7 +84,7 @@ router.get('/login', (req, res) => {
 });
 
 // Login handler
-router.post('/login', rateLimit, (req, res) => {
+router.post('/login', rateLimit, async (req, res) => {
   const { email, password } = req.body;
   const isAjax = req.headers['x-requested-with'] === 'XMLHttpRequest' || req.headers.accept === 'application/json';
 
@@ -98,7 +98,7 @@ router.post('/login', rateLimit, (req, res) => {
     });
   }
 
-  const account = accounts.authenticate(email, password);
+  const account = await accounts.authenticate(email, password);
   if (!account) {
     recordAttempt(req.ip);
     const msg = 'Invalid email or password. Please try again.';
@@ -119,9 +119,9 @@ router.post('/login', rateLimit, (req, res) => {
 });
 
 // Dashboard
-router.get('/', requireAuth, (req, res) => {
-  const registrations = store.readAll('registrations');
-  const contacts = store.readAll('contacts');
+router.get('/', requireAuth, async (req, res) => {
+  const registrations = await store.readAll('registrations');
+  const contacts = await store.readAll('contacts');
 
   const stats = {
     total: registrations.length,
@@ -146,30 +146,30 @@ router.get('/', requireAuth, (req, res) => {
 });
 
 // ── Individual Registration ──
-router.get('/registrations/:id', requireAuth, (req, res) => {
-  const entry = store.findById('registrations', req.params.id);
+router.get('/registrations/:id', requireAuth, async (req, res) => {
+  const entry = await store.findById('registrations', req.params.id);
   if (!entry) return res.status(404).render('404', { title: 'Not Found', page: 'admin', description: '' });
   res.render('admin/registrant', {
     title: `${entry.name} — Registration`,
     page: 'admin',
     description: '',
     entry,
-    regCount: store.count('registrations'),
-    contactCount: store.count('contacts')
+    regCount: await store.count('registrations'),
+    contactCount: await store.count('contacts')
   });
 });
 
 // ── Individual Contact ──
-router.get('/contacts/:id', requireAuth, (req, res) => {
-  const entry = store.findById('contacts', req.params.id);
+router.get('/contacts/:id', requireAuth, async (req, res) => {
+  const entry = await store.findById('contacts', req.params.id);
   if (!entry) return res.status(404).render('404', { title: 'Not Found', page: 'admin', description: '' });
   res.render('admin/contact-detail', {
     title: `${entry.name} — Message`,
     page: 'admin',
     description: '',
     entry,
-    regCount: store.count('registrations'),
-    contactCount: store.count('contacts')
+    regCount: await store.count('registrations'),
+    contactCount: await store.count('contacts')
   });
 });
 
@@ -192,56 +192,56 @@ function csvSafe(val) {
 }
 
 // ── Export: Registrations CSV ──
-router.get('/export/registrations', requireAuth, (req, res) => {
-  const registrations = store.readAll('registrations');
+router.get('/export/registrations', requireAuth, async (req, res) => {
+  const registrations = await store.readAll('registrations');
   const filename = `yw26-registrations-${exportStamp()}.csv`;
   const header = 'ID,Name,Email,Age Group,Church,Role,Referral,Date\n';
   const rows = registrations.map(r =>
     `"${csvSafe(r.id)}","${csvSafe(r.name)}","${csvSafe(r.email)}","${csvSafe(r.age)}","${csvSafe(r.church)}","${csvSafe(r.role)}","${csvSafe(r.heard)}","${csvSafe(r.createdAt)}"`
   ).join('\n');
-  store.logDownload({ type: 'CSV', dataset: 'registrations', filename, ip: req.ip });
+  await store.logDownload({ type: 'CSV', dataset: 'registrations', filename, ip: req.ip });
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.send(header + rows);
 });
 
 // ── Export: Contacts CSV ──
-router.get('/export/contacts', requireAuth, (req, res) => {
-  const contacts = store.readAll('contacts');
+router.get('/export/contacts', requireAuth, async (req, res) => {
+  const contacts = await store.readAll('contacts');
   const filename = `yw26-contacts-${exportStamp()}.csv`;
   const header = 'ID,Name,Email,Phone,Subject,Message,Date\n';
   const rows = contacts.map(c =>
     `"${csvSafe(c.id)}","${csvSafe(c.name)}","${csvSafe(c.email)}","${csvSafe(c.phone)}","${csvSafe(c.subject)}","${csvSafe(c.message)}","${csvSafe(c.createdAt)}"`
   ).join('\n');
-  store.logDownload({ type: 'CSV', dataset: 'contacts', filename, ip: req.ip });
+  await store.logDownload({ type: 'CSV', dataset: 'contacts', filename, ip: req.ip });
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.send(header + rows);
 });
 
 // ── Export: Registrations JSON ──
-router.get('/export/registrations/json', requireAuth, (req, res) => {
-  const registrations = store.readAll('registrations');
+router.get('/export/registrations/json', requireAuth, async (req, res) => {
+  const registrations = await store.readAll('registrations');
   const filename = `yw26-registrations-${exportStamp()}.json`;
-  store.logDownload({ type: 'JSON', dataset: 'registrations', filename, ip: req.ip });
+  await store.logDownload({ type: 'JSON', dataset: 'registrations', filename, ip: req.ip });
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.send(JSON.stringify(registrations, null, 2));
 });
 
 // ── Export: Contacts JSON ──
-router.get('/export/contacts/json', requireAuth, (req, res) => {
-  const contacts = store.readAll('contacts');
+router.get('/export/contacts/json', requireAuth, async (req, res) => {
+  const contacts = await store.readAll('contacts');
   const filename = `yw26-contacts-${exportStamp()}.json`;
-  store.logDownload({ type: 'JSON', dataset: 'contacts', filename, ip: req.ip });
+  await store.logDownload({ type: 'JSON', dataset: 'contacts', filename, ip: req.ip });
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.send(JSON.stringify(contacts, null, 2));
 });
 
 // ── Export: Registrations PDF (print-optimised HTML) ──
-router.get('/export/registrations/pdf', requireAuth, (req, res) => {
-  const registrations = store.readAll('registrations');
+router.get('/export/registrations/pdf', requireAuth, async (req, res) => {
+  const registrations = await store.readAll('registrations');
   const now = new Date().toLocaleString('en-NG', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
 
   const rows = registrations.map((r, i) => `
@@ -273,8 +273,8 @@ router.get('/export/registrations/pdf', requireAuth, (req, res) => {
 });
 
 // ── Export: Contacts PDF (print-optimised HTML) ──
-router.get('/export/contacts/pdf', requireAuth, (req, res) => {
-  const contacts = store.readAll('contacts');
+router.get('/export/contacts/pdf', requireAuth, async (req, res) => {
+  const contacts = await store.readAll('contacts');
   const now = new Date().toLocaleString('en-NG', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
 
   const rows = contacts.map((c, i) => `
@@ -305,22 +305,22 @@ router.get('/export/contacts/pdf', requireAuth, (req, res) => {
 });
 
 // ── Delete Registration ──
-router.delete('/registrations/:id', requireAuth, csrfCheck, (req, res) => {
-  const removed = store.remove('registrations', req.params.id);
+router.delete('/registrations/:id', requireAuth, csrfCheck, async (req, res) => {
+  const removed = await store.remove('registrations', req.params.id);
   if (!removed) return res.status(404).json({ success: false, error: 'Record not found.' });
   res.json({ success: true });
 });
 
 // ── Delete Contact ──
-router.delete('/contacts/:id', requireAuth, csrfCheck, (req, res) => {
-  const removed = store.remove('contacts', req.params.id);
+router.delete('/contacts/:id', requireAuth, csrfCheck, async (req, res) => {
+  const removed = await store.remove('contacts', req.params.id);
   if (!removed) return res.status(404).json({ success: false, error: 'Record not found.' });
   res.json({ success: true });
 });
 
 // ── Credentials API (authenticated, returns account list) ──
-router.get('/api/credentials', requireAuth, (req, res) => {
-  const allAccounts = accounts.getAll();
+router.get('/api/credentials', requireAuth, async (req, res) => {
+  const allAccounts = await accounts.getAll();
   const primary = allAccounts[0] || {};
   res.json({
     email: primary.email || '',
@@ -341,9 +341,9 @@ router.post('/logout', csrfCheck, (req, res) => {
    ================================================================ */
 
 // ── Registrations Page ──
-router.get('/registrations', requireAuth, (req, res) => {
-  const registrations = store.readAll('registrations');
-  const logs = store.readAll('download-log').reverse().slice(0, 30);
+router.get('/registrations', requireAuth, async (req, res) => {
+  const registrations = await store.readAll('registrations');
+  const logs = (await store.readAll('download-log')).reverse().slice(0, 30);
   res.render('admin/registrations', {
     title: 'Registrations — Admin',
     page: 'admin',
@@ -354,9 +354,9 @@ router.get('/registrations', requireAuth, (req, res) => {
 });
 
 // ── Contacts Page ──
-router.get('/contacts', requireAuth, (req, res) => {
-  const contacts = store.readAll('contacts');
-  const logs = store.readAll('download-log').reverse().slice(0, 30);
+router.get('/contacts', requireAuth, async (req, res) => {
+  const contacts = await store.readAll('contacts');
+  const logs = (await store.readAll('download-log')).reverse().slice(0, 30);
   res.render('admin/contacts', {
     title: 'Messages — Admin',
     page: 'admin',
@@ -376,47 +376,47 @@ router.get('/analytics', requireAuth, (req, res) => {
 });
 
 // ── Accounts Page ──
-router.get('/accounts', requireAuth, (req, res) => {
+router.get('/accounts', requireAuth, async (req, res) => {
   res.render('admin/accounts', {
     title: 'Accounts — Admin',
     page: 'admin',
     description: '',
-    accounts: accounts.getAll(),
-    regCount: store.count('registrations'),
-    contactCount: store.count('contacts'),
+    accounts: await accounts.getAll(),
+    regCount: await store.count('registrations'),
+    contactCount: await store.count('contacts'),
     success: null,
     error: null
   });
 });
 
 // ── Accounts API: List ──
-router.get('/api/accounts', requireAuth, (req, res) => {
-  res.json({ ok: true, accounts: accounts.getAll() });
+router.get('/api/accounts', requireAuth, async (req, res) => {
+  res.json({ ok: true, accounts: await accounts.getAll() });
 });
 
 // ── Accounts API: Add ──
-router.post('/api/accounts', requireAuth, csrfCheck, (req, res) => {
+router.post('/api/accounts', requireAuth, csrfCheck, async (req, res) => {
   const { email, password, role } = req.body;
-  const result = accounts.addAccount(email, password, role || 'admin');
+  const result = await accounts.addAccount(email, password, role || 'admin');
   if (result.error) return res.status(400).json({ ok: false, error: result.error });
   res.json({ ok: true, account: result });
 });
 
 // ── Accounts API: Update ──
-router.put('/api/accounts/:id', requireAuth, csrfCheck, (req, res) => {
+router.put('/api/accounts/:id', requireAuth, csrfCheck, async (req, res) => {
   const { email, password, role } = req.body;
   const fields = {};
   if (email) fields.email = email;
   if (password) fields.password = password;
   if (role) fields.role = role;
-  const result = accounts.updateAccount(req.params.id, fields);
+  const result = await accounts.updateAccount(req.params.id, fields);
   if (result.error) return res.status(400).json({ ok: false, error: result.error });
   res.json({ ok: true, account: result });
 });
 
 // ── Accounts API: Delete ──
-router.delete('/api/accounts/:id', requireAuth, csrfCheck, (req, res) => {
-  const result = accounts.deleteAccount(req.params.id);
+router.delete('/api/accounts/:id', requireAuth, csrfCheck, async (req, res) => {
+  const result = await accounts.deleteAccount(req.params.id);
   if (result.error) return res.status(400).json({ ok: false, error: result.error });
   res.json({ ok: true });
 });
@@ -435,7 +435,7 @@ router.get('/profile', requireAuth, (req, res) => {
 });
 
 // ── Profile: Change Password ──
-router.post('/profile/password', requireAuth, csrfCheck, (req, res) => {
+router.post('/profile/password', requireAuth, csrfCheck, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   const accountId = req.session.accountId;
   const email = req.session.accountEmail || '';
@@ -448,12 +448,12 @@ router.post('/profile/password', requireAuth, csrfCheck, (req, res) => {
   if (!currentPassword || !newPassword) return render('Please fill in all fields.', null);
 
   // Verify current password
-  const account = accounts.authenticate(email, currentPassword);
+  const account = await accounts.authenticate(email, currentPassword);
   if (!account) return render('Current password is incorrect.', null);
 
   if (newPassword.length < 8) return render('New password must be at least 8 characters.', null);
 
-  const result = accounts.updateAccount(accountId, { password: newPassword });
+  const result = await accounts.updateAccount(accountId, { password: newPassword });
   if (result.error) return render(result.error, null);
 
   // Store in session so Credentials PDF can include it until session ends
@@ -485,16 +485,16 @@ router.get('/api/generate-password', requireAuth, (req, res) => {
 });
 
 // ── Download log API (last 50) ──
-router.get('/api/download-log', requireAuth, (req, res) => {
-  const logs = store.readAll('download-log').reverse().slice(0, 50);
+router.get('/api/download-log', requireAuth, async (req, res) => {
+  const logs = (await store.readAll('download-log')).reverse().slice(0, 50);
   res.json({ ok: true, logs });
 });
 
 // ── Log a client-side download (for jsPDF etc.) ──
-router.post('/api/log-download', requireAuth, express.json(), csrfCheck, (req, res) => {
+router.post('/api/log-download', requireAuth, express.json(), csrfCheck, async (req, res) => {
   const { type, dataset, filename } = req.body;
   if (!type || !dataset || !filename) return res.status(400).json({ ok: false });
-  store.logDownload({ type, dataset, filename, ip: req.ip });
+  await store.logDownload({ type, dataset, filename, ip: req.ip });
   res.json({ ok: true });
 });
 

@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-const FileStore = require('session-file-store')(session);
+const MongoStore = require('connect-mongo').default;
+const mongoose = require('mongoose');
 const compression = require('compression');
 const crypto = require('crypto');
 const path = require('path');
@@ -12,12 +13,13 @@ if (!process.env.SESSION_SECRET || process.env.SESSION_SECRET.length < 16) {
   process.exit(1);
 }
 
+if (!process.env.MONGODB_URI) {
+  console.error('[FATAL] MONGODB_URI env var is missing. Refusing to start.');
+  process.exit(1);
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Seed admin accounts from .env if no accounts exist yet
-const accounts = require('./lib/accounts');
-accounts.ensureSeeded();
 
 // View engine
 app.set('view engine', 'ejs');
@@ -71,16 +73,15 @@ app.use(express.urlencoded({ extended: true, limit: '50kb' }));
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: '7d' }));
 app.use('/images', express.static(path.join(__dirname, 'assets', 'images'), { maxAge: '7d' }));
 
-// ── Session ──
+// ── Session (MongoDB-backed) ──
 // Secure cookies whenever running in production (behind HTTPS proxy).
-// req.secure / req.protocol already reflect https because trust proxy is set above.
 const useSecureCookie = process.env.NODE_ENV === 'production';
 app.use(session({
-  store: new FileStore({
-    path: path.join(__dirname, 'data', 'sessions'),
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    collectionName: 'sessions',
     ttl: 7200,
-    retries: 1,
-    logFn: function() {}
+    autoRemove: 'native'
   }),
   name: 'yw26.sid',
   secret: process.env.SESSION_SECRET,
@@ -180,25 +181,41 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   });
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+// ── Connect to MongoDB, seed accounts, then start server ──
+async function start() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('[MongoDB] Connected successfully');
 
-// ── Graceful shutdown ──
-function gracefulShutdown(signal) {
-  console.log(`\n[${signal}] Shutting down gracefully…`);
-  server.close(() => {
-    console.log('All connections closed. Exiting.');
-    process.exit(0);
-  });
-  // Force exit after 10s if connections won't close
-  setTimeout(() => {
-    console.error('Forced shutdown after timeout.');
+    // Seed admin accounts from .env if no accounts exist yet
+    const accounts = require('./lib/accounts');
+    await accounts.ensureSeeded();
+
+    const server = app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
+    });
+
+    // ── Graceful shutdown ──
+    function gracefulShutdown(signal) {
+      console.log(`\n[${signal}] Shutting down gracefully…`);
+      server.close(async () => {
+        await mongoose.connection.close();
+        console.log('All connections closed. Exiting.');
+        process.exit(0);
+      });
+      // Force exit after 10s if connections won't close
+      setTimeout(() => {
+        console.error('Forced shutdown after timeout.');
+        process.exit(1);
+      }, 10000).unref();
+    }
+    process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+    process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+  } catch (err) {
+    console.error('[FATAL] Failed to connect to MongoDB:', err.message);
     process.exit(1);
-  }, 10000).unref();
+  }
 }
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 // ── Crash safety: log and exit cleanly ──
 process.on('unhandledRejection', (reason, promise) => {
@@ -206,7 +223,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 process.on('uncaughtException', (err) => {
   console.error('[FATAL] Uncaught Exception:', err.stack || err.message);
-  // Attempt graceful shutdown then force exit
-  server.close(() => process.exit(1));
-  setTimeout(() => process.exit(1), 5000).unref();
+  mongoose.connection.close().finally(() => process.exit(1));
 });
+
+start();
