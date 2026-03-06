@@ -1,0 +1,328 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<style>
+  /* ── join.ejs specific ── */
+  @media (max-width: 768px) {
+    .join-grid { gap: 28px; }
+    .join-info-card h4 { font-size: 16px; }
+    .join-info-row { font-size: 13px; padding: 10px 0; gap: 10px; }
+    .join-info-row svg { width: 16px; height: 16px; flex-shrink: 0; }
+  }
+  @media (max-width: 480px) {
+    .join-card { padding: 20px 16px; }
+    .join-card h3 { font-size: 20px; margin-bottom: 4px; }
+    /* Form success state */
+    .form-success { padding: 28px 16px; }
+    .form-success h4 { font-size: 18px; }
+    .form-success p  { font-size: 13px; }
+    /* Submit button */
+    .btn-submit { padding: 13px 16px; font-size: 14px; }
+    /* FAQ */
+    .faq-section { padding: 14px; }
+    .faq-section h4 { font-size: 15px; margin-bottom: 10px; }
+    .faq-q { font-size: 13px; padding: 13px 0; }
+    .faq-a p { font-size: 12px; padding-bottom: 12px; }
+    /* Event info card */
+    .join-info-card { padding: 16px 14px; }
+    .join-info-row { font-size: 12px; gap: 8px; }
+    /* CTA footer buttons */
+    .cta-banner div[style] a { display: block; width: 100%; text-align: center; }
+  }
+</style>
+
+<style>
+  /* ── Shared inner-page mobile fixes ── */
+
+  /* 1. Remove min-height from page-hero — tall phones get huge dead space otherwise */
+  /* ── Shared inner-page hero ── */
+  .page-hero {
+    min-height: 0 !important;
+    padding: calc(var(--nav-h) + 64px) 0 60px !important;
+  }
+  @media (max-width: 768px) {
+    .page-hero { padding: calc(var(--nav-h) + 52px) 0 48px !important; }
+    .page-title { line-height: .88; }
+  }
+  @media (max-width: 480px) {
+    .page-hero { padding: calc(var(--nav-h) + 44px) 0 40px !important; }
+    .page-title { font-size: clamp(52px, 15vw, 80px) !important; font-weight: 900; letter-spacing: 1px; }
+    .page-hero-sub { font-size: 14px; max-width: 90vw; }
+    .eyebrow { font-size: 11px; letter-spacing: 3px; margin-bottom: 16px; }
+    .cta-banner div[style] { flex-direction: column !important; align-items: stretch !important; }
+    .cta-banner .btn-primary,
+    .cta-banner .btn-ghost { width: 100%; justify-content: center; text-align: center; }
+    .section-title { line-height: 1.05; }
+  }
+</style>
+
+
+<section class="page-hero">
+  <div class="page-hero-bg join-bg">
+    <div class="page-hero-particles">
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+    </div>
+  </div>
+  <div class="page-hero-accent"></div>
+  <div class="container">
+    <div class="page-hero-content">
+      <span class="eyebrow reveal">Be Part of It</span>
+      <h1 class="page-title reveal rd1"><em>Register</em></h1>
+      <p class="page-hero-sub reveal rd2">Fill in the form to register your interest for future editions of Youth Week.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="join-grid">
+
+      <!-- Form -->
+      <div>
+        <div class="join-card form-card reveal rd1">
+          <h3>Registration Form</h3>
+          <p class="form-intro">All fields marked <span class="req-star">*</span> are required.</p>
+
+          <div id="joinSuccess" class="form-success" style="display:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/></svg>
+            <h4>You're registered!</h4>
+            <p>Thank you for registering. We'll be in touch with updates about Youth Week 27 and future events.</p>
+          </div>
+
+          <div id="joinForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="j-name">Full Name <span class="req-star">*</span></label>
+                <input type="text" id="j-name" name="name" placeholder="Your full name" required>
+              </div>
+              <div class="form-group">
+                <label for="j-email">Email Address <span class="req-star">*</span></label>
+                <input type="email" id="j-email" name="email" placeholder="you@example.com" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="j-age">Age Group <span class="req-star">*</span></label>
+                <input type="hidden" id="j-age" name="age" required>
+                <div class="custom-dropdown" data-target="j-age">
+                  <button type="button" class="custom-dropdown-trigger" tabindex="0">
+                    <span class="dd-text dd-placeholder">Select age group</span>
+                    <svg class="dd-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>
+                  </button>
+                  <div class="custom-dropdown-menu">
+                    <div class="custom-dropdown-item" data-value="13-17">13–17 (Teen)</div>
+                    <div class="custom-dropdown-item" data-value="18-24">18–24 (Young Adult)</div>
+                    <div class="custom-dropdown-item" data-value="25-30">25–30 (Adult)</div>
+                    <div class="custom-dropdown-item" data-value="31-35">31–35 (Senior Youth)</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="j-church">Corps / Church</label>
+                <input type="text" id="j-church" name="church" placeholder="Your corps or church">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="j-role">Participation Type <span class="req-star">*</span></label>
+              <input type="hidden" id="j-role" name="role" required>
+              <div class="custom-dropdown" data-target="j-role">
+                <button type="button" class="custom-dropdown-trigger" tabindex="0">
+                  <span class="dd-text dd-placeholder">Select participation type</span>
+                  <svg class="dd-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>
+                </button>
+                <div class="custom-dropdown-menu">
+                  <div class="custom-dropdown-item" data-value="attendee">Attendee</div>
+                  <div class="custom-dropdown-item" data-value="volunteer">Volunteer</div>
+                  <div class="custom-dropdown-item" data-value="speaker-nominee">Speaker Nominee</div>
+                  <div class="custom-dropdown-item" data-value="worker">Worker/Staff</div>
+                  <div class="custom-dropdown-item" data-value="musician">Musician/Choir</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="j-heard">How did you hear about us?</label>
+              <input type="hidden" id="j-heard" name="heard">
+              <div class="custom-dropdown" data-target="j-heard">
+                <button type="button" class="custom-dropdown-trigger" tabindex="0">
+                  <span class="dd-text dd-placeholder">Select an option</span>
+                  <svg class="dd-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>
+                </button>
+                <div class="custom-dropdown-menu">
+                  <div class="custom-dropdown-item" data-value="social-media">Social Media</div>
+                  <div class="custom-dropdown-item" data-value="friend">Friend / Word of Mouth</div>
+                  <div class="custom-dropdown-item" data-value="church">Church Announcement</div>
+                  <div class="custom-dropdown-item" data-value="flyer">Flyer / Poster</div>
+                  <div class="custom-dropdown-item" data-value="whatsapp">WhatsApp Group</div>
+                  <div class="custom-dropdown-item" data-value="other">Other</div>
+                </div>
+              </div>
+            </div>
+            <div id="joinError" class="form-error" style="display:none;"></div>
+            <button class="btn-primary btn-lg btn-submit" id="joinSubmit" onclick="handleJoinSubmit()">
+              <span id="joinBtnText">Submit Registration</span>
+              <span id="joinBtnLoader" style="display:none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" class="spin"><path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/></svg>
+                Submitting...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="join-right">
+        <div class="join-info-card reveal rd2">
+          <h4>Event Info</h4>
+          <div class="join-info-row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/></svg>
+            <span>Youth Week 26 · 2026</span>
+          </div>
+          <div class="join-info-row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/></svg>
+            <span>The Salvation Army IBCC, Ibadan</span>
+          </div>
+          <div class="join-info-row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></svg>
+            <span>Ages 13–35 Welcome</span>
+          </div>
+          <div class="join-info-row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/><path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/></svg>
+            <span>Free Registration</span>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq-section reveal rd3">
+          <h4>FAQs</h4>
+          <div class="faq-item">
+            <button class="faq-q">Is registration really free?<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg></button>
+            <div class="faq-a"><p>Yes! Youth Week has always been completely free for all participants. Just register and show up.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">Who can attend?<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg></button>
+            <div class="faq-a"><p>All young people aged 13–35 are welcome. You do not have to be a Salvation Army member — all denominations and backgrounds are welcome.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">Can I volunteer or serve?<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg></button>
+            <div class="faq-a"><p>Absolutely! Select "Volunteer" or "Worker/Staff" in the participation type. We will get in touch with your assignment details.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">When is the next Youth Week?<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg></button>
+            <div class="faq-a"><p>Youth Week 27 dates will be announced on our social media and WhatsApp channels. Register here and we'll keep you updated.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="cta-banner">
+  <div class="cta-banner-bg"></div>
+  <div class="container cta-banner-inner">
+    <h2 class="reveal">Have <span class="text-gold">Questions?</span></h2>
+    <p class="reveal rd1">Our team is happy to help. Reach out via the contact page or WhatsApp.</p>
+    <div class="reveal rd2" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="/contact" class="btn-primary btn-lg">Contact Us</a>
+      <a href="https://wa.me/2348078800552" target="_blank" rel="noopener" class="btn-ghost btn-lg">WhatsApp Us</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// Custom dropdown init
+(function() {
+  document.querySelectorAll('.custom-dropdown').forEach(function(dd) {
+    var trigger = dd.querySelector('.custom-dropdown-trigger');
+    var textEl = trigger.querySelector('.dd-text');
+    var menu = dd.querySelector('.custom-dropdown-menu');
+    var items = dd.querySelectorAll('.custom-dropdown-item');
+    var hiddenId = dd.dataset.target;
+    var hidden = document.getElementById(hiddenId);
+
+    trigger.addEventListener('click', function(e) {
+      e.preventDefault();
+      var wasOpen = dd.classList.contains('open');
+      document.querySelectorAll('.custom-dropdown.open').forEach(function(d) { d.classList.remove('open'); });
+      if (!wasOpen) dd.classList.add('open');
+    });
+
+    items.forEach(function(item) {
+      item.addEventListener('click', function() {
+        items.forEach(function(i) { i.classList.remove('selected'); });
+        item.classList.add('selected');
+        hidden.value = item.dataset.value;
+        textEl.textContent = item.textContent;
+        textEl.classList.remove('dd-placeholder');
+        dd.classList.remove('open');
+      });
+    });
+
+    trigger.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') dd.classList.remove('open');
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger.click(); }
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.custom-dropdown')) {
+      document.querySelectorAll('.custom-dropdown.open').forEach(function(d) { d.classList.remove('open'); });
+    }
+  });
+})();
+
+function handleJoinSubmit() {
+  const name = document.getElementById('j-name').value.trim();
+  const email = document.getElementById('j-email').value.trim();
+  const age = document.getElementById('j-age').value;
+  const role = document.getElementById('j-role').value;
+  const errEl = document.getElementById('joinError');
+
+  if (!name || !email || !age || !role) {
+    errEl.textContent = 'Please fill all required fields.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  const btn = document.getElementById('joinSubmit');
+  document.getElementById('joinBtnText').style.display = 'none';
+  document.getElementById('joinBtnLoader').style.display = 'inline-flex';
+  btn.disabled = true;
+
+  const body = {
+    name, email, age, role,
+    church: document.getElementById('j-church').value.trim(),
+    heard: document.getElementById('j-heard').value
+  };
+
+  fetch('/join', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content },
+    body: JSON.stringify(body)
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.ok) {
+      window.location.href = '/thank-you/registration?name=' + encodeURIComponent(name);
+    } else {
+      errEl.textContent = data.message || 'Something went wrong. Please try again.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      document.getElementById('joinBtnText').style.display = '';
+      document.getElementById('joinBtnLoader').style.display = 'none';
+    }
+  })
+  .catch(() => {
+    errEl.textContent = 'Network error. Please check your connection and try again.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    document.getElementById('joinBtnText').style.display = '';
+    document.getElementById('joinBtnLoader').style.display = 'none';
+  });
+}
+</script>
+
+<%- include('partials/footer') %>

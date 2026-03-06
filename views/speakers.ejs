@@ -1,0 +1,282 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<style>
+  /* ── speakers.ejs specific ── */
+  @media (max-width: 768px) {
+    .spk-card { padding: 20px 18px; gap: 14px; }
+    .spk-body h4 { font-size: 17px; }
+    .spk-role { font-size: 12px; }
+    .spk-session { font-size: 11px; margin-bottom: 8px; }
+    .spk-bio { font-size: 13px; line-height: 1.65; }
+  }
+  @media (max-width: 480px) {
+    /* Avatar beside name on mobile — horizontal layout */
+    .spk-card {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 14px;
+    }
+    .spk-avatar {
+      width: 48px; height: 48px;
+      flex-shrink: 0;
+      border-radius: 50%;
+    }
+    .spk-avatar svg { width: 22px; height: 22px; }
+    .spk-body { min-width: 0; }
+    .spk-body h4 { font-size: 14px; margin-bottom: 2px; }
+    .spk-role { font-size: 11px; margin-bottom: 2px; }
+    .spk-session { font-size: 10px; margin-bottom: 6px; }
+    .spk-bio { font-size: 12px; line-height: 1.6; }
+    /* Nomination section */
+    .values-inner div[style*="max-width"] { text-align: left !important; }
+    .values-inner div[style*="max-width"] .section-sub { max-width: none; }
+    /* Nomination CTA buttons */
+    .values-inner div[style*="display:flex"] {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 10px !important;
+    }
+    .values-inner .btn-primary,
+    .values-inner .btn-ghost { width: 100%; justify-content: center; text-align: center; }
+  }
+</style>
+
+<style>
+  /* ── Shared inner-page mobile fixes ── */
+
+  /* ── Shared inner-page hero ── */
+  .page-hero {
+    min-height: 0 !important;
+    padding: calc(var(--nav-h) + 64px) 0 60px !important;
+  }
+  @media (max-width: 768px) {
+    .page-hero { padding: calc(var(--nav-h) + 52px) 0 48px !important; }
+    .page-title { line-height: .88; }
+  }
+  @media (max-width: 480px) {
+    .page-hero { padding: calc(var(--nav-h) + 44px) 0 40px !important; }
+    .page-title { font-size: clamp(52px, 15vw, 80px) !important; font-weight: 900; letter-spacing: 1px; }
+    .page-hero-sub { font-size: 14px; max-width: 90vw; }
+    .eyebrow { font-size: 11px; letter-spacing: 3px; margin-bottom: 16px; }
+    .cta-banner div[style] { flex-direction: column !important; align-items: stretch !important; }
+    .cta-banner .btn-primary,
+    .cta-banner .btn-ghost { width: 100%; justify-content: center; text-align: center; }
+    .section-title { line-height: 1.05; }
+  }
+</style>
+
+
+<section class="page-hero">
+  <div class="page-hero-bg speakers-bg">
+    <div class="page-hero-particles">
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+    </div>
+  </div>
+  <div class="page-hero-accent"></div>
+  <div class="container">
+    <div class="page-hero-content">
+      <span class="eyebrow reveal">Resource Persons</span>
+      <h1 class="page-title reveal rd1"><em>Speakers</em></h1>
+      <p class="page-hero-sub reveal rd2">Meet the ministers, leaders, and professionals who spoke at the Youth Retreat 2026.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad" style="padding-bottom:0;">
+  <div class="container">
+    <div style="max-width:720px;margin:0 auto;text-align:center;">
+      <span class="eyebrow reveal">Youth Retreat 2026</span>
+      <h2 class="section-title reveal rd1">Anointed Voices. <span class="text-red">Real Stories.</span></h2>
+      <p class="section-sub reveal rd2">Our speakers were carefully chosen — not just for their credentials, but for their genuine walk with God and their love for young people.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SPEAKERS GRID -->
+<section class="section-pad">
+  <div class="container">
+    <span class="eyebrow reveal">All Speakers</span>
+    <h2 class="section-title reveal rd1">The <span class="text-blue">Lineup</span></h2>
+
+    <div class="speakers-grid">
+
+      <!-- Featured: Sunday Preacher -->
+      <div class="spk-card reveal rd1">
+        <div class="spk-avatar" style="--c1:#CC0000;--c2:#660000;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Bro Michael Adeboboye</h4>
+          <p class="spk-role">Sunday Holiness Preacher · Physical Exercise Lead</p>
+          <p class="spk-session">Holiness Message · Day 3 Sunday &nbsp;&middot;&nbsp; Also: Physical Exercise · Day 2</p>
+          <p class="spk-bio">Bro Michael Adeboboye delivered the centrepiece holiness message at the Sunday service — a powerful call to consecration and greater impact. He also co-led Saturday morning physical exercise with Sis Christianah Oyedele.</p>
+        </div>
+      </div>
+
+      <!-- Major Blessing Eboh -->
+      <div class="spk-card reveal rd2">
+        <div class="spk-avatar" style="--c1:#0033A0;--c2:#001155;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Major Blessing Eboh <span style="font-size:12px;color:var(--text-dim)">(CO)</span></h4>
+          <p class="spk-role">Relationship Talk Speaker · Day 2 Saturday</p>
+          <p class="spk-session">Topic: Godly Friendships and Wise Choices</p>
+          <p class="spk-bio">Major Blessing Eboh spoke on navigating relationships with godly wisdom — helping young people understand the value of good friendships and the importance of the choices they make in life and faith.</p>
+        </div>
+      </div>
+
+      <!-- Major Sarah Oyedele -->
+      <div class="spk-card reveal rd3">
+        <div class="spk-avatar" style="--c1:#660044;--c2:#0033A0;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Major Sarah Oyedele <span style="font-size:12px;color:var(--text-dim)">(DDWM)</span></h4>
+          <p class="spk-role">Relationship Talk Speaker · Day 2 Saturday</p>
+          <p class="spk-session">Topic: Building Healthy Relationships: God's Way</p>
+          <p class="spk-bio">As DDWM (Divisional Director for Women's Ministries), Major Sarah Oyedele brought deep insight on what healthy, God-honouring relationships look like in practice — a session received with great impact by participants.</p>
+        </div>
+      </div>
+
+      <!-- CSM Charles -->
+      <div class="spk-card reveal rd1">
+        <div class="spk-avatar" style="--c1:#1a1a3e;--c2:#0033A0;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>CSM Charles Offong</h4>
+          <p class="spk-role">Financial Literacy Lecturer · Day 2 Saturday</p>
+          <p class="spk-session">Lecture: Tax, Taxation &amp; the Nigerian Tax Reform (11am – 12pm)</p>
+          <p class="spk-bio">CSM Charles Offong delivered a timely and practical session on The ABC of Nigerian Tax Law — breaking down recent Nigerian tax reforms and what they mean for young professionals, entrepreneurs, and faith-based organisations.</p>
+        </div>
+      </div>
+
+      <!-- Mr Joshua Olatunde -->
+      <div class="spk-card reveal rd2">
+        <div class="spk-avatar" style="--c1:#004400;--c2:#0033A0;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Mr Joshua Olatunde</h4>
+          <p class="spk-role">Tech Skills Facilitator · Day 2 Saturday</p>
+          <p class="spk-session">Tech Skill Acquisition Session (4:00pm – 5:00pm)</p>
+          <p class="spk-bio">Mr Joshua Olatunde equipped participants with practical digital skills and internet tools, demonstrating how technology can be a powerful platform for ministry growth, career advancement, and kingdom impact.</p>
+        </div>
+      </div>
+
+      <!-- Sis Christianah -->
+      <div class="spk-card reveal rd3">
+        <div class="spk-avatar" style="--c1:#CC0000;--c2:#003366;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Sis Christianah Oyedele</h4>
+          <p class="spk-role">Opening Exhortation · Worship Leader · Sunday Service Leader</p>
+          <p class="spk-session">Day 1: Opening Exhortation &amp; Prayer &nbsp;&middot;&nbsp; Day 3: Holiness Meeting Leader</p>
+          <p class="spk-bio">Sis Christianah Oyedele opened the retreat with the exhortation that set its tone, co-led Saturday morning exercises, and led the Sunday holiness service — one of the most consistently present voices throughout the entire retreat.</p>
+        </div>
+      </div>
+
+      <!-- Sis Victoria -->
+      <div class="spk-card reveal rd1">
+        <div class="spk-avatar" style="--c1:#0033A0;--c2:#002060;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Sis Victoria Ibrahim</h4>
+          <p class="spk-role">Worship Lead · Communication Skills Facilitator</p>
+          <p class="spk-session">Day 1: Worship &amp; Intercessory Prayer &nbsp;&middot;&nbsp; Day 2: Communication Skills Session (9am)</p>
+          <p class="spk-bio">Sis Victoria co-led the Friday night worship and intercession session alongside Mr Michael, then facilitated Saturday's communication skills workshop — covering public speaking and using your voice for ministry and career impact.</p>
+        </div>
+      </div>
+
+      <!-- Sis Josephine -->
+      <div class="spk-card reveal rd2">
+        <div class="spk-avatar" style="--c1:#CC0000;--c2:#4d0000;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Sis Josephine Akinrotimi</h4>
+          <p class="spk-role">Teaching Session Lead · Sunday Worship</p>
+          <p class="spk-session">Day 1: Teaching Session 1 — The Gospel &nbsp;&middot;&nbsp; Day 3: Worship &amp; Prayer</p>
+          <p class="spk-bio">Sis Josephine Akinrotimi taught on the relationship between sin, grace, faith, and salvation during Friday’s night teaching session, then led worship and prayer at the Sunday holiness service.</p>
+        </div>
+      </div>
+
+      <!-- Bro Solomon -->
+      <div class="spk-card reveal rd3">
+        <div class="spk-avatar" style="--c1:#FFD700;--c2:#AA6600;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Bro Solomon Adebayo</h4>
+          <p class="spk-role">Teaching Session Lead · Sunday Testimonies</p>
+          <p class="spk-session">Day 1: Teaching Session 2 — Discipleship &nbsp;&middot;&nbsp; Day 3: Choruses &amp; Testimonies</p>
+          <p class="spk-bio">Bro Solomon Adebayo taught on discipleship and why we should share our faith during Friday's night session, then led the choruses and testimonies segment at the Sunday holiness service.</p>
+        </div>
+      </div>
+
+      <!-- Mrs Ntuk -->
+      <div class="spk-card reveal rd1">
+        <div class="spk-avatar" style="--c1:#2d0066;--c2:#CC0000;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Mrs. Christianah Ntuk</h4>
+          <p class="spk-role">Reflection &amp; Testimonies Moderator · Day 2 Saturday</p>
+          <p class="spk-session">Moment of Truth — Reflection &amp; Testimonies (5:00pm – 5:30pm)</p>
+          <p class="spk-bio">Mrs. Christianah Ntuk moderated the Saturday reflection segment — a powerful 30-minute window of honest testimonies and personal responses to the day's sessions, creating space for participants to encounter God personally.</p>
+        </div>
+      </div>
+
+      <!-- Bro Precious & Bro Isaiah -->
+      <div class="spk-card reveal rd2">
+        <div class="spk-avatar" style="--c1:#003344;--c2:#0033A0;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white" width="36" height="36"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4"/></svg>
+        </div>
+        <div class="spk-body">
+          <h4>Bro. Precious Eboh &amp; Bro. Isaiah Adebayo</h4>
+          <p class="spk-role">Saturday Duty Officers · Day 2</p>
+          <p class="spk-session">Duty Officers &nbsp;&middot;&nbsp; Bro. Precious : Morning Devotion (6:00am)</p>
+          <p class="spk-bio">Bro. Precious and Bro. Isaiah served as Saturday duty officers, overseeing the day's logistics and flow. Bro. Precious also led the Saturday morning devotion that opened the day's programme for all campers.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="values-section section-pad">
+  <div class="values-bg"></div>
+  <div class="container values-inner">
+    <div style="max-width:680px;margin:0 auto;text-align:center;">
+      <span class="eyebrow reveal">Know Someone?</span>
+      <h2 class="section-title reveal rd1">Nominate a <span class="text-red">Speaker</span></h2>
+      <p class="section-sub reveal rd2">Know a minister, professional, or leader whose testimony would bless Youth Week? Speaker nominations for future editions are always open.</p>
+      <div class="reveal rd3" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="/contact" class="btn-primary btn-lg">Submit a Nomination</a>
+        <a href="/activities" class="btn-ghost btn-lg">View Full Programme</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-banner">
+  <div class="cta-banner-bg"></div>
+  <div class="container cta-banner-inner">
+    <h2 class="reveal">See the <span class="text-gold">Gallery</span></h2>
+    <p class="reveal rd1">Browse photos from the Youth Retreat 2026 and relive the moments.</p>
+    <div class="reveal rd2" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="/gallery" class="btn-primary btn-lg">View Gallery</a>
+      <a href="/activities" class="btn-ghost btn-lg">Full Schedule</a>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

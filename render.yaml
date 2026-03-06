@@ -1,0 +1,57 @@
+services:
+  - type: web
+    name: tsa-youth-week-26
+    runtime: node
+    region: singapore   # change to: oregon | frankfurt | ohio | virginia | singapore
+    plan: free          # upgrade to 'starter' for persistent disk support
+
+    buildCommand: npm install
+    startCommand: npm start   # prestart runs build:css + build:js automatically
+
+    # ── Persistent disk — keeps data/ across deploys ──────────────────────────
+    # Free plan does NOT support persistent disks.
+    # Uncomment the block below when you upgrade to a paid plan (starter+).
+    # Without it, registrations, contacts and sessions reset on every deploy.
+    #
+    # disk:
+    #   name: tsa-data
+    #   mountPath: /opt/render/project/src/data
+    #   sizeGB: 1
+
+    healthCheckPath: /
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      - key: PORT
+        value: 10000          # Render always exposes port 10000 internally
+
+      # ── REQUIRED — set these in the Render dashboard, NOT here ────────────
+      # Never commit real secrets to git.
+
+      - key: SESSION_SECRET
+        generateValue: true   # Render auto-generates a secure random value
+
+      - key: ADMIN_EMAIL
+        sync: false           # you'll type the value in the Render dashboard
+
+      - key: ADMIN_PASSWORD
+        sync: false
+
+      - key: SITE_URL
+        sync: false           # e.g. https://tsa-youth-week-26.onrender.com
+
+      # ── Google Analytics (optional) ───────────────────────────────────────
+      - key: GA_TRACKING_ID
+        sync: false           # e.g. G-XXXXXXXXXX
+
+      - key: GA_PROPERTY_ID
+        sync: false
+
+      # Use ONE of the three GA service-account options:
+      - key: GA_SERVICE_ACCOUNT_JSON
+        sync: false
+
+      # - key: GA_SERVICE_ACCOUNT_B64
+      #   sync: false

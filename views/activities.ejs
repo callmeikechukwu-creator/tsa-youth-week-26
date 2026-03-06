@@ -1,0 +1,382 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<style>
+  /* ── activities.ejs specific ── */
+  @media (max-width: 768px) {
+    .day-header { margin-bottom: 28px; padding-left: 18px; }
+    .day-header .section-title { margin-bottom: 8px; }
+    .day-header .section-sub { font-size: 14px; margin-bottom: 0; }
+    .sched-item { grid-template-columns: 100px 1fr; }
+    .sched-time { font-size: 11px; padding: 16px 12px; }
+    .sched-content { padding: 16px 18px; }
+    .sched-title { font-size: 14px; }
+    .sched-desc { font-size: 12px; }
+  }
+  @media (max-width: 480px) {
+    /* YW banner stats */
+    .yw-banner-stats { flex-wrap: wrap; gap: 16px; justify-content: center; }
+    .yw-stat { min-width: 64px; }
+    .yw-stat strong { font-size: 36px !important; }
+    .yw-badge { font-size: 10px; padding: 3px 10px; }
+    /* Day badge */
+    .day-badge { font-size: 11px; padding: 4px 12px; }
+    .day-header { padding-left: 14px; margin-bottom: 24px; }
+    /* Schedule items stack vertically on mobile */
+    .sched-item { grid-template-columns: 1fr; }
+    .sched-time {
+      border-right: none; border-bottom: 1px solid var(--border);
+      padding: 12px 16px; justify-content: flex-start;
+      font-size: 11px; color: var(--red); font-weight: 700;
+    }
+    .sched-content { padding: 14px 16px; }
+    .sched-content::before { display: none; }
+    .sched-title { font-size: 14px; }
+    .sched-desc { font-size: 12px; }
+    .duty-officer { font-size: 12px; padding: 8px 12px; }
+  }
+</style>
+
+<style>
+  /* ── Shared inner-page hero ── */
+  .page-hero {
+    min-height: 0 !important;
+    padding: calc(var(--nav-h) + 64px) 0 60px !important;
+  }
+  @media (max-width: 768px) {
+    .page-hero { padding: calc(var(--nav-h) + 52px) 0 48px !important; }
+    .page-title { line-height: .88; }
+  }
+  @media (max-width: 480px) {
+    .page-hero { padding: calc(var(--nav-h) + 44px) 0 40px !important; }
+    .page-title { font-size: clamp(52px, 15vw, 80px) !important; font-weight: 900; letter-spacing: 1px; }
+    .page-hero-sub { font-size: 14px; max-width: 90vw; }
+    .eyebrow { font-size: 11px; letter-spacing: 3px; margin-bottom: 16px; }
+    .cta-banner div[style] { flex-direction: column !important; align-items: stretch !important; }
+    .cta-banner .btn-primary,
+    .cta-banner .btn-ghost { width: 100%; justify-content: center; text-align: center; }
+    .section-title { line-height: 1.05; }
+  }
+</style>
+
+
+<section class="page-hero">
+  <div class="page-hero-bg activities-bg">
+    <div class="page-hero-particles">
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+    </div>
+  </div>
+  <div class="page-hero-accent"></div>
+  <div class="container">
+    <div class="page-hero-content">
+      <span class="eyebrow reveal">Youth Retreat · Youth Week 26</span>
+      <h1 class="page-title reveal rd1"><em>Programme</em></h1>
+      <p class="page-hero-sub reveal rd2">Theme: <strong>"Built for Greater Impact"</strong> · Three days of worship, equipping, and fellowship.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO BANNER -->
+<section class="section-pad" style="padding-bottom:0;">
+  <div class="container">
+    <div class="yw-banner reveal">
+      <div class="yw-banner-text">
+        <div class="yw-badge">Youth Week 26</div>
+        <h3>Youth Retreat 2026</h3>
+        <p>Hosted by The Salvation Army Ibadan Central Corps. Three packed days of faith, equipping, and fellowship — <strong>Friday through Sunday</strong>. Moderators: <strong>Sis Precious Oyedele</strong> (Friday) &amp; <strong>Bro Ikechukwu Alaeto</strong> (Saturday).</p>
+      </div>
+      <div class="yw-banner-stats">
+        <div class="yw-stat"><strong>3</strong><span>Days</span></div>
+        <div class="yw-stat"><strong>20+</strong><span>Sessions</span></div>
+        <div class="yw-stat"><strong>10+</strong><span>Speakers</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DAY 1 — FRIDAY ═══ -->
+<section class="section-pad">
+  <div class="container">
+    <div class="day-header reveal">
+      <div class="day-badge red-tag">Day 1</div>
+      <h2 class="section-title">Friday — <span class="text-red">Arrival &amp; Alignment</span></h2>
+      <p class="section-sub">Setting the tone for the retreat through arrival, registration, and an evening of worship and alignment with God's purpose.</p>
+    </div>
+
+    <div class="schedule-grid">
+      <div class="sched-item accent-red reveal rd1">
+        <div class="sched-time">4:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Arrival &amp; Registration</div>
+          <div class="sched-desc">Participants check in, collect materials, and settle in. Welcome packages distributed.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-red reveal rd2">
+        <div class="sched-time">4:30 – 5:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Opening Exhortation &amp; Prayer</div>
+          <div class="sched-desc">Led by <strong>Sis Christianah</strong> — Setting the tone for the retreat: "Built for Greater Impact"</div>
+        </div>
+      </div>
+      <div class="sched-item accent-blue reveal rd3">
+        <div class="sched-time">5:00 – 6:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Sanitation / Camp Setup</div>
+          <div class="sched-desc">All Campers — Settling in, cleaning, and orientation to the campsite.</div>
+        </div>
+      </div>
+      <div class="sched-item reveal rd1">
+        <div class="sched-time">6:00 – 7:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Rest &amp; Dinner</div>
+          <div class="sched-desc">All Campers — Fellowship over a shared evening meal.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-gold reveal rd2">
+        <div class="sched-time">7:00 – 8:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Worship &amp; Intercessory Prayer</div>
+          <div class="sched-desc">Led by <strong>Sis Victoria</strong> &amp; <strong>Mr Michael</strong> — Corporate worship and intercession over the retreat.</div>
+        </div>
+      </div>
+      <div class="sched-item sched-featured accent-red reveal rd3">
+        <div class="sched-time">8:00 – 10:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Teaching Session 1 &amp; 2</div>
+          <div class="sched-desc">Session 1: Understanding the Gospel — Sin, Grace, Faith &amp; Salvation · <strong>Sis Josephine</strong><br>Session 2: Discipleship — Why should we share our Faith? · <strong>Bro Solomon</strong></div>
+        </div>
+      </div>
+      <div class="sched-item accent-blue reveal rd1">
+        <div class="sched-time">10:00 PM – 12 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Movie Night</div>
+          <div class="sched-desc">Inspirational / Christian film screening for all campers.</div>
+        </div>
+      </div>
+      <div class="sched-item reveal rd2">
+        <div class="sched-time">12:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Closing Prayer</div>
+          <div class="sched-desc">A Camper — Short closing prayer to end the first night.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DAY 2 — SATURDAY ═══ -->
+<section class="values-section section-pad">
+  <div class="values-bg"></div>
+  <div class="container values-inner">
+    <div class="day-header day-blue reveal">
+      <div class="day-badge blue-tag">Day 2</div>
+      <h2 class="section-title">Saturday — <span class="text-blue">Equipping for Impact</span></h2>
+      <p class="section-sub">The heart of the retreat — a full day of skills workshops, spiritual sessions, sports, and evening rehearsals.</p>
+    </div>
+
+    <div class="duty-officer">Duty Officers: <strong>Bro Isaiah / Bro Precious</strong> &middot; Moderator: <strong>Bro Ikechukwu</strong></div>
+
+    <div class="schedule-grid">
+      <div class="sched-item accent-gold reveal rd1">
+        <div class="sched-time">5:00 – 6:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Personal Devotion &amp; Environmental Cleaning</div>
+          <div class="sched-desc">All Campers — Starting the day in God's presence and keeping the camp clean.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-red reveal rd2">
+        <div class="sched-time">6:00 – 6:30 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Morning Devotion</div>
+          <div class="sched-desc">Led by <strong>Bro Precious</strong> — Corporate morning devotion to open the day.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-blue reveal rd3">
+        <div class="sched-time">6:30 – 7:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Physical Exercise</div>
+          <div class="sched-desc">Led by <strong>Mr Michael</strong> &amp; <strong>Sis Christianah</strong> — Morning exercise and stretching for all campers.</div>
+        </div>
+      </div>
+      <div class="sched-item reveal rd1">
+        <div class="sched-time">7:00 – 8:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Bathing &amp; Preparation</div>
+          <div class="sched-desc">Personal grooming and getting ready for the day's sessions.</div>
+        </div>
+      </div>
+      <div class="sched-item reveal rd2">
+        <div class="sched-time">8:00 – 9:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Breakfast</div>
+          <div class="sched-desc">All Campers — Shared breakfast and morning fellowship.</div>
+        </div>
+      </div>
+      <div class="sched-item sched-featured accent-blue reveal rd3">
+        <div class="sched-time">9:00 – 10:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Communication Skills Session</div>
+          <div class="sched-desc"><strong>Sis Victoria</strong> — Public speaking, effective communication, and using your voice for ministry and career impact.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-gold reveal rd1">
+        <div class="sched-time">10:00 – 11:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Practical Skill: Soap Making</div>
+          <div class="sched-desc">All Campers — Hands-on vocational training introducing soap production as a viable livelihood and small business skill.</div>
+        </div>
+      </div>
+      <div class="sched-item sched-featured accent-red reveal rd2">
+        <div class="sched-time">11:00 AM – 12:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Lecture: Tax, Taxation &amp; the Nigerian Tax Reform</div>
+          <div class="sched-desc"><strong>CSM Charles</strong> — The ABC of Nigerian Tax Law: practical financial literacy for young professionals and entrepreneurs.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-gold reveal rd3">
+        <div class="sched-time">12:00 – 1:30 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Games &amp; Team Bonding</div>
+          <div class="sched-desc">All Campers — Fun group activities to build camaraderie and strengthen fellowship.</div>
+        </div>
+      </div>
+      <div class="sched-item reveal rd1">
+        <div class="sched-time">1:30 – 2:30 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Lunch Break / Chat</div>
+          <div class="sched-desc">All Campers — Shared lunch and informal conversations.</div>
+        </div>
+      </div>
+      <div class="sched-item sched-featured accent-red reveal rd2">
+        <div class="sched-time">2:30 – 3:30 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Relationship Talks</div>
+          <div class="sched-desc">Topic 1: Godly Friendships and Wise Choices — <strong>Major Blessing Eboh</strong><br>Topic 2: Building Healthy Relationships: God's Way — <strong>Major Sarah Oyedele (DDWM)</strong></div>
+        </div>
+      </div>
+      <div class="sched-item accent-blue reveal rd3">
+        <div class="sched-time">3:30 – 4:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Ice Breaker Session</div>
+          <div class="sched-desc">Fun activities and group bonding exercises to re-energise campers after the afternoon sessions.</div>
+        </div>
+      </div>
+      <div class="sched-item sched-featured accent-blue reveal rd1">
+        <div class="sched-time">4:00 – 5:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Tech Skill Acquisition</div>
+          <div class="sched-desc"><strong>Mr Joshua Olatunde</strong> — Practical digital skills, internet tools, and how technology serves ministry and career growth.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-gold reveal rd2">
+        <div class="sched-time">5:00 – 5:30 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Moment of Truth — Reflection &amp; Testimonies</div>
+          <div class="sched-desc"><strong>Mrs Ntuk</strong> — Space to reflect, share testimonies, and respond to the day's sessions.</div>
+        </div>
+      </div>
+      <div class="sched-item reveal rd3">
+        <div class="sched-time">5:30 – 7:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Break / Football / Cooking Activities</div>
+          <div class="sched-desc">All Campers — Football competition and recreational activities while the kitchen team prepares dinner.</div>
+        </div>
+      </div>
+      <div class="sched-item reveal rd1">
+        <div class="sched-time">7:00 – 8:00 PM</div>
+        <div class="sched-content">
+          <div class="sched-title">Dinner</div>
+          <div class="sched-desc">All Campers — Shared dinner and evening fellowship.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-blue reveal rd2">
+        <div class="sched-time">8:00 PM – 12 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Rehearsals</div>
+          <div class="sched-desc">Choir, drama, and performance groups rehearse for the Sunday holiness service.</div>
+        </div>
+      </div>
+      <div class="sched-item reveal rd3">
+        <div class="sched-time">12:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Lights Out</div>
+          <div class="sched-desc">End of Saturday programme. Rest for Sunday's holiness service.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DAY 3 — SUNDAY ═══ -->
+<section class="section-pad">
+  <div class="container">
+    <div class="day-header day-gold reveal">
+      <div class="day-badge gold-tag">Day 3</div>
+      <h2 class="section-title">Sunday — <span class="text-gold">Holiness Meeting</span></h2>
+      <p class="section-sub">The retreat closes with a holiness-themed Sunday service — worship, the Word, offerings, ministry, and commissioning by the Commanding Officer.</p>
+    </div>
+
+    <div class="duty-officer">Leader: <strong>Sis Christianah</strong> &middot; Speaker: <strong>Bro Michael</strong></div>
+
+    <div class="schedule-grid">
+      <div class="sched-item accent-gold reveal rd1">
+        <div class="sched-time">5:00 – 7:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Personal Devotion, Cleaning &amp; Bathing</div>
+          <div class="sched-desc">All Campers — Final morning preparation before the holiness service.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-red reveal rd2">
+        <div class="sched-time">7:00 – 8:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Morning Devotion</div>
+          <div class="sched-desc">Led by <strong>Sis Eva</strong> — Corporate devotion to open the final day.</div>
+        </div>
+      </div>
+      <div class="sched-item accent-blue reveal rd3">
+        <div class="sched-time">9:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Bible Study</div>
+          <div class="sched-desc">All Campers — Group Bible study in preparation for the holiness service.</div>
+        </div>
+      </div>
+      <div class="sched-item sched-featured accent-red reveal rd1">
+        <div class="sched-time">10:00 AM</div>
+        <div class="sched-content">
+          <div class="sched-title">Holiness Meeting Begins</div>
+          <div class="sched-desc">
+            Service Order:<br>
+            1. Worship &amp; Prayer — <strong>Sis Josephine</strong><br>
+            2. Opening Song — <strong>Sis Glory</strong><br>
+            3. Bible Reading — <strong>Sis Faith</strong><br>
+            4. Band Selection &amp; Freewill Offering<br>
+            5. Announcements<br>
+            6. Choruses &amp; Testimonies — <strong>Bro Solomon</strong><br>
+            7. Support for Youth Work — <strong>Bro Remi / Bro Joshua</strong><br>
+            8. Youth Ministration<br>
+            9. Message — <strong>Bro Michael</strong><br>
+            10. Closing Song &amp; Project/Tithe Collection — <strong>Bro Ugochukwu</strong><br>
+            11. Prayer &amp; Benediction — <strong>Commanding Officer</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-banner">
+  <div class="cta-banner-bg"></div>
+  <div class="container cta-banner-inner">
+    <h2 class="reveal">See the <span class="text-gold">Speakers</span> &amp; Gallery</h2>
+    <p class="reveal rd1">Meet the resource persons who spoke at the retreat, or browse the gallery from Youth Week 26.</p>
+    <div class="reveal rd2" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="/speakers" class="btn-primary btn-lg">Meet the Speakers</a>
+      <a href="/gallery" class="btn-ghost btn-lg">View Gallery</a>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,183 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<style>
+  /* ── gallery.ejs specific ── */
+  @media (max-width: 768px) {
+    .gallery-filters {
+      /* Allow horizontal scroll if too many filters */
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+      /* Hide scrollbar visually */
+      scrollbar-width: none;
+    }
+    .gallery-filters::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; white-space: nowrap; }
+  }
+  @media (max-width: 480px) {
+    /* Allow wrap for small but manageable filter counts */
+    .gallery-filters { flex-wrap: wrap; overflow-x: visible; }
+    /* Grid: 2 cols, square-ish rows */
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 130px; gap: 8px; }
+    .g-large { grid-column: span 2; grid-row: span 1; }
+    /* Placeholder icon: smaller */
+    .g-placeholder-inner svg { width: 24px; height: 24px; }
+    .g-placeholder-inner span { font-size: 10px; }
+    .gallery-note { font-size: 12px; }
+    .gallery-note code { font-size: 11px; }
+  }
+  @media (max-width: 360px) {
+    .gallery-grid { grid-auto-rows: 110px; gap: 6px; }
+    .g-large { grid-column: span 2; }
+  }
+</style>
+
+<style>
+  /* ── Shared inner-page mobile fixes ── */
+
+  /* ── Shared inner-page hero ── */
+  .page-hero {
+    min-height: 0 !important;
+    padding: calc(var(--nav-h) + 64px) 0 60px !important;
+  }
+  @media (max-width: 768px) {
+    .page-hero { padding: calc(var(--nav-h) + 52px) 0 48px !important; }
+    .page-title { line-height: .88; }
+  }
+  @media (max-width: 480px) {
+    .page-hero { padding: calc(var(--nav-h) + 44px) 0 40px !important; }
+    .page-title { font-size: clamp(52px, 15vw, 80px) !important; font-weight: 900; letter-spacing: 1px; }
+    .page-hero-sub { font-size: 14px; max-width: 90vw; }
+    .eyebrow { font-size: 11px; letter-spacing: 3px; margin-bottom: 16px; }
+    .cta-banner div[style] { flex-direction: column !important; align-items: stretch !important; }
+    .cta-banner .btn-primary,
+    .cta-banner .btn-ghost { width: 100%; justify-content: center; text-align: center; }
+    .section-title { line-height: 1.05; }
+  }
+</style>
+
+
+<section class="page-hero">
+  <div class="page-hero-bg gallery-bg">
+    <div class="page-hero-particles">
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+    </div>
+  </div>
+  <div class="page-hero-accent"></div>
+  <div class="container">
+    <div class="page-hero-content">
+      <span class="eyebrow reveal">Captured Moments</span>
+      <h1 class="page-title reveal rd1"><em>Gallery</em></h1>
+      <p class="page-hero-sub reveal rd2">Snapshots from the Youth Retreat 2026 — three days of faith, fellowship, and greater impact.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="gallery-filters reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="worship">Worship</button>
+      <button class="filter-btn" data-filter="workshop">Workshops</button>
+      <button class="filter-btn" data-filter="sports">Sports</button>
+      <button class="filter-btn" data-filter="fellowship">Fellowship</button>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="g-item g-large" data-cat="worship">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#CC0000,#330000);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Opening Night Worship</span></div>
+        </div>
+        <div class="g-overlay"><span>Opening Night · Day 1</span></div>
+      </div>
+      <div class="g-item" data-cat="fellowship">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#0033A0,#001155);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Registration Day</span></div>
+        </div>
+        <div class="g-overlay"><span>Arrival · Day 1</span></div>
+      </div>
+      <div class="g-item" data-cat="worship">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#2d0066,#CC0000);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Exhortation Session</span></div>
+        </div>
+        <div class="g-overlay"><span>Opening Exhortation · Day 1</span></div>
+      </div>
+      <div class="g-item" data-cat="workshop">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#004400,#0033A0);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Communication Skills</span></div>
+        </div>
+        <div class="g-overlay"><span>Workshop · Day 2</span></div>
+      </div>
+      <div class="g-item g-large" data-cat="workshop">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#664400,#CC6600);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Soap Making Session</span></div>
+        </div>
+        <div class="g-overlay"><span>Soap Making · Day 2</span></div>
+      </div>
+      <div class="g-item" data-cat="workshop">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#003366,#0055CC);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Tech Skills</span></div>
+        </div>
+        <div class="g-overlay"><span>Tech Skills · Day 2</span></div>
+      </div>
+      <div class="g-item" data-cat="sports">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#006600,#003300);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Football</span></div>
+        </div>
+        <div class="g-overlay"><span>Sports · Day 2</span></div>
+      </div>
+      <div class="g-item g-large" data-cat="sports">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#1a1a3e,#CC0000);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Group Activities</span></div>
+        </div>
+        <div class="g-overlay"><span>Recreation · Day 2</span></div>
+      </div>
+      <div class="g-item" data-cat="fellowship">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#330000,#CC0000);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Dinner Fellowship</span></div>
+        </div>
+        <div class="g-overlay"><span>Dinner · Day 2</span></div>
+      </div>
+      <div class="g-item" data-cat="worship">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#FFD700,#CC6600);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgba(0,0,0,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Sunday Worship</span></div>
+        </div>
+        <div class="g-overlay"><span>Holiness Service · Day 3</span></div>
+      </div>
+      <div class="g-item" data-cat="worship">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#0033A0,#CC0000);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Holiness Message</span></div>
+        </div>
+        <div class="g-overlay"><span>Preaching · Day 3</span></div>
+      </div>
+      <div class="g-item g-large" data-cat="fellowship">
+        <div class="g-placeholder" style="background:linear-gradient(135deg,#CC0000,#0033A0);">
+          <div class="g-placeholder-inner"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="rgba(255,255,255,0.5)" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/></svg><span>Group Photo · Commissioning</span></div>
+        </div>
+        <div class="g-overlay"><span>Commissioning &amp; Departure · Day 3</span></div>
+      </div>
+    </div>
+
+    <p class="gallery-note reveal" style="text-align:center;margin-top:32px;color:var(--text-muted);font-size:14px;">
+      📸 Real photos from Youth Week 26 will be uploaded here. Add your photos to the <code>public/images/gallery/</code> folder.
+    </p>
+  </div>
+</section>
+
+<div class="cta-banner">
+  <div class="cta-banner-bg"></div>
+  <div class="container cta-banner-inner">
+    <h2 class="reveal">Explore the <span class="text-gold">Full Programme</span></h2>
+    <p class="reveal rd1">See what happened across the three days of the Youth Retreat.</p>
+    <div class="reveal rd2" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="/activities" class="btn-primary btn-lg">View Schedule</a>
+      <a href="/speakers" class="btn-ghost btn-lg">Meet Speakers</a>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

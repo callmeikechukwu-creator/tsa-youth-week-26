@@ -1,0 +1,29 @@
+{
+  "name": "tsa-youth-week-26",
+  "version": "1.0.0",
+  "description": "The Salvation Army IBCC Youth Fellowship — Youth Retreat 2026 Showcase",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "npm run build && nodemon --ext js,css,ejs --ignore public/css/*.min.css --ignore public/js/*.min.js --ignore public/js/*.map -x \"npm run build && node app.js\"",
+    "build:css": "cleancss -O2 -o public/css/style.min.css public/css/style.css && cleancss -O2 -o public/css/admin.min.css public/css/admin.css && cleancss -O2 -o public/css/admin-login.min.css public/css/admin-login.css && cleancss -O2 -o public/css/admin-registrant.min.css public/css/admin-registrant.css && cleancss -O2 -o public/css/admin-contact.min.css public/css/admin-contact.css",
+    "build:js": "terser public/js/script.js --compress drop_console=false,passes=3,dead_code=true,collapse_vars=true,reduce_vars=true,pure_getters=true --mangle toplevel=true --output public/js/script.min.js --source-map url=script.min.js.map",
+    "build": "npm run build:css && npm run build:js",
+    "prestart": "npm run build"
+  },
+  "dependencies": {
+    "@google-analytics/data": "^5.2.1",
+    "compression": "^1.8.1",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "session-file-store": "^1.5.0"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3",
+    "html-minifier-terser": "^7.2.0",
+    "nodemon": "^3.1.9",
+    "terser": "^5.46.0"
+  }
+}

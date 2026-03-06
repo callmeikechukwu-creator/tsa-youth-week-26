@@ -1,0 +1,285 @@
+<%- include('partials/head', { loaderText: 'Loading Youth Week 26' }) %>
+<%- include('partials/nav') %>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<style>
+  /* Fix: hero vertically centers on tall viewports causing huge dead space above content on mobile.
+     On mobile we align to flex-start and use padding-top instead. */
+  @media (max-width: 768px) {
+    .hero {
+      align-items: flex-start;
+      min-height: 100svh;
+    }
+    .hero-inner {
+      padding-top: calc(var(--nav-h) + 40px);
+      padding-bottom: 72px;
+      width: 100%;
+      max-width: none;
+    }
+  }
+  @media (max-width: 480px) {
+    .hero-inner {
+      padding-top: calc(var(--nav-h) + 28px);
+      padding-bottom: 56px;
+    }
+    /* Badge: prevent wrapping on narrow screens */
+    .hero-badge {
+      font-size: 9px;
+      letter-spacing: 1px;
+      padding: 6px 12px;
+      white-space: normal;
+      max-width: 100%;
+    }
+  }
+</style>
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-glow glow-1"></div>
+    <div class="hero-glow glow-2"></div>
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-shapes">
+      <div class="hero-shape"></div>
+      <div class="hero-shape"></div>
+      <div class="hero-shape"></div>
+      <div class="hero-shape"></div>
+      <div class="hero-shape"></div>
+    </div>
+    <div class="hero-cross"></div>
+  </div>
+
+  <div class="container hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge reveal rd1">
+        <span class="badge-pulse"></span>
+        <span>Youth Retreat 2026 · IBCC</span>
+      </div>
+      <h1 class="hero-title reveal rd2">
+        <span class="ht-line">BUILT FOR</span>
+        <span class="ht-line ht-stroke">GREATER</span>
+        <span class="ht-line ht-red">IMPACT</span>
+      </h1>
+      <p class="hero-sub reveal rd3">
+        <em>"Arise, shine, for your light has come!"</em> — Isaiah 60:1<br>
+        Three days of faith, skills, worship, and fellowship at the Salvation Army Ibadan Central Corps Youth Retreat 2026.
+      </p>
+      <div class="hero-cta reveal rd4">
+        <a href="/join" class="btn-primary btn-lg" style="text-align:center;">Register Now</a>
+        <a href="/activities" class="btn-ghost btn-lg" style="text-align:center;border-color:rgba(255,255,255,0.25);">View Programme</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-slash"></div>
+</section>
+
+<!-- ═══════════════ INTRO ═══════════════ -->
+<section class="section-pad">
+  <div class="container">
+    <div class="intro-grid">
+      <div>
+        <span class="eyebrow reveal">Who We Are</span>
+        <h2 class="section-title reveal rd1">IBCC <span class="text-red">Youth</span><br>Fellowship</h2>
+        <p class="section-sub reveal rd2">
+          The Salvation Army Ibadan Central Corps Youth Fellowship is a vibrant community of young people committed to growing in faith, serving their city, and living out the gospel together.
+        </p>
+
+        <div class="yw-feature reveal rd3">
+          <div>
+            <span class="yw-feature-date">Youth Week 26 · Ibadan Central Corps</span>
+            <h3 class="yw-feature-title">Built for <em class="text-gold">Greater Impact</em></h3>
+            <p>A three-day retreat packed with teaching sessions, skills workshops, relationship talks, intercessory worship, a tax reform lecture, and a Sunday holiness service — designed to equip young people for real-world impact.</p>
+            <a href="/activities" class="btn-primary">Full Programme</a>
+          </div>
+          <div class="yw-feature-days">
+            <div class="yw-feature-day">
+              <div>
+                <h4>Friday — Arrival &amp; Alignment</h4>
+                <p>Registration · Exhortation (Sis Christianah) · Camp Setup · Teaching Sessions · Movie Night</p>
+              </div>
+            </div>
+            <div class="yw-feature-day">
+              <div>
+                <h4>Saturday — Equipping for Impact</h4>
+                <p>Communication · Soap Making · Tax Reform (CSM Charles) · Relationship Talks · Tech Skills (Mr Joshua Olatunde)</p>
+              </div>
+            </div>
+            <div class="yw-feature-day">
+              <div>
+                <h4>Sunday — Holiness Meeting</h4>
+                <p>Led by Sis Christianah · Speaker: Bro Michael · Worship, Ministry &amp; Commissioning</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="intro-stats reveal rd2">
+        <div class="intro-stat-card">
+          <div class="intro-stat-icon" style="background:rgba(204,0,0,.2);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></svg>
+          </div>
+          <div class="intro-stat-text">
+            <strong>200+</strong>
+            <span>Young People</span>
+          </div>
+        </div>
+        <div class="intro-stat-card">
+          <div class="intro-stat-icon" style="background:rgba(0,51,160,.2);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/></svg>
+          </div>
+          <div class="intro-stat-text">
+            <strong>3 Days</strong>
+            <span>Fri–Sun Retreat</span>
+          </div>
+        </div>
+        <div class="intro-stat-card">
+          <div class="intro-stat-icon" style="background:rgba(255,215,0,.12);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/></svg>
+          </div>
+          <div class="intro-stat-text">
+            <strong>26th</strong>
+            <span>Edition · 2026</span>
+          </div>
+        </div>
+        <div class="intro-stat-card">
+          <div class="intro-stat-icon" style="background:rgba(204,0,0,.2);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10h14V4zm-9 1h7v1H2.5zm0 2h7v1H2.5z"/></svg>
+          </div>
+          <div class="intro-stat-text">
+            <strong>10+</strong>
+            <span>Speakers & Guests</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STATS STRIP ═══════════════ -->
+<div class="stats-strip">
+  <div class="container stats-inner">
+    <div class="stat-item reveal">
+      <span class="stat-n" data-count="200" data-suffix="+">0+</span>
+      <span class="stat-l">Registered Youth</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat-item reveal rd1">
+      <span class="stat-n" data-count="26">0</span>
+      <span class="stat-l">Years Running</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat-item reveal rd2">
+      <span class="stat-n" data-count="3">0</span>
+      <span class="stat-l">Days of Retreat</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat-item reveal rd3">
+      <span class="stat-n" data-count="10" data-suffix="+">0+</span>
+      <span class="stat-l">Speakers &amp; Facilitators</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat-item reveal rd4">
+      <span class="stat-n" data-count="12" data-suffix="+">0+</span>
+      <span class="stat-l">Activities</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PROGRAMME HIGHLIGHTS ═══════════════ -->
+<section class="section-pad">
+  <div class="container">
+    <span class="eyebrow reveal">Retreat Programme</span>
+    <h2 class="section-title reveal rd1">The <span class="text-red">Programme</span></h2>
+    <p class="section-sub reveal rd2">Three days of purpose-driven sessions — faith, practical skills, and holiness — designed to strengthen young people and send them out for greater impact.</p>
+
+    <div class="yw-grid">
+    <div class="yw-card reveal rd1">
+    <span class="yw-day-tag red-tag">Friday · Day 1</span>
+    <h4>Arrival &amp; Alignment</h4>
+    <p>Opening exhortation and prayer by <strong>Sis Christianah</strong>. Camp setup, dinner, then worship and intercessory prayer led by <strong>Sis Victoria &amp; Mr Michael</strong>. Night teaching sessions: The Gospel (Sis Josephine) and Discipleship (Bro Solomon), followed by a Christian movie night.</p>
+    <a href="/activities" class="card-link">Full Schedule →</a>
+    </div>
+    <div class="yw-card yw-card-featured reveal rd2">
+    <span class="yw-day-tag blue-tag">Saturday · Day 2</span>
+    <h4>Equipping for Impact</h4>
+    <p>Communication skills (<strong>Sis Victoria</strong>), soap making, Nigerian Tax Reform lecture (<strong>CSM Charles</strong>), Relationship Talks by <strong>Major Blessing Eboh</strong> and <strong>Major Sarah Oyedele (DDWM)</strong>, Tech skills (<strong>Mr Joshua Olatunde</strong>), and Moment of Truth reflections (<strong>Mrs Ntuk</strong>).</p>
+    <a href="/activities" class="card-link">Full Schedule →</a>
+    </div>
+    <div class="yw-card reveal rd3">
+    <span class="yw-day-tag gold-tag">Sunday · Day 3</span>
+    <h4>Holiness Meeting</h4>
+    <p>Sunday holiness service led by <strong>Sis Christianah</strong>. Worship by Sis Josephine, Bible reading by Sis Faith, testimonies by Bro Solomon, and the holiness message preached by <strong>Bro Michael</strong>. Closing prayer and benediction by the Commanding Officer.</p>
+    <a href="/activities" class="card-link">Full Schedule →</a>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MANIFESTO ═══════════════ -->
+<div class="manifesto">
+  <div class="manifesto-inner">
+    <div class="manifesto-slash m-slash-1"></div>
+    <div class="manifesto-content">
+      <div class="container">
+        <blockquote class="manifesto-q">
+          "Arise, shine, for your <em>light has come</em>,<br>and the glory of the Lord rises upon you."
+        </blockquote>
+        <cite class="manifesto-cite">Isaiah 60:1 · Youth Week 26 Theme Verse</cite>
+      </div>
+    </div>
+    <div class="manifesto-slash m-slash-2"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ PILLARS ═══════════════ -->
+<section class="section-pad">
+  <div class="container">
+    <span class="eyebrow reveal">Our Foundation</span>
+    <h2 class="section-title reveal rd1">Built on Three <span class="text-gold">Pillars</span></h2>
+
+    <div class="pillar-cards">
+      <div class="pillar-card reveal rd1">
+        <div class="pillar-card-icon" style="background:rgba(204,0,0,.2);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10h14V4zM2 5h12v8H2z"/></svg>
+        </div>
+        <div class="pillar-card-text">
+          <h3>Faith & Worship</h3>
+          <p>Rooted in prayer, scripture, and devotion to Christ. Every activity begins and ends with God at the centre. We believe young people can change the world when they are anchored in faith.</p>
+        </div>
+      </div>
+      <div class="pillar-card reveal rd2">
+        <div class="pillar-card-icon" style="background:rgba(0,51,160,.2);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></svg>
+        </div>
+        <div class="pillar-card-text">
+          <h3>Community & Service</h3>
+          <p>We are stronger together. Through outreach, mentorship, and service projects, we embody The Salvation Army's call to reach the lost, serve the vulnerable, and love our neighbours.</p>
+        </div>
+      </div>
+      <div class="pillar-card reveal rd3">
+        <div class="pillar-card-icon" style="background:rgba(255,215,0,.12);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/></svg>
+        </div>
+        <div class="pillar-card-text">
+          <h3>Growth & Leadership</h3>
+          <p>Equipping young people with skills, knowledge, and godly character to lead in their homes, churches, and nation. The next generation of Salvation Army officers starts here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<div class="cta-banner">
+  <div class="cta-banner-bg"></div>
+  <div class="container cta-banner-inner">
+    <h2 class="reveal">Ready for <span class="text-red">Youth Week</span> <span class="text-gold">27</span>?</h2>
+    <p class="reveal rd1">Register now, browse the speakers, and see the full retreat programme from Youth Retreat 2026.</p>
+    <div class="reveal rd2" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="/gallery" class="btn-primary btn-lg">View Gallery</a>
+      <a href="/activities" class="btn-ghost btn-lg">Full Programme</a>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

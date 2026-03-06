@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+  <title>Analytics — Admin · IBCC Youth Week 26</title>
+  <link rel="icon" type="image/png" href="/images/tsa-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.min.css">
+</head>
+<body>
+
+<div class="adm-overlay" id="admOverlay"></div>
+<div class="adm-layout">
+
+  <% locals.activePage = 'analytics'; %>
+  <%- include('partials/sidebar') %>
+
+  <main class="adm-main">
+    <div class="adm-topbar">
+      <div class="adm-topbar-left">
+        <button class="adm-hamburger" id="admHamburger" aria-label="Toggle menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/></svg>
+        </button>
+        <h1>ANALYTICS</h1>
+      </div>
+      <div class="adm-topbar-right">
+        <span class="adm-time" id="admClock"></span>
+        <button id="gaRefreshBtn" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted);padding:8px 16px;border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/></svg>
+          Refresh
+        </button>
+        <button id="gaExportPdfBtn" style="background:#cc0000;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:700;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/></svg>
+          Export PDF
+        </button>
+      </div>
+    </div>
+
+    <div class="adm-content">
+
+      <!-- Realtime pill -->
+      <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-size:13px;color:var(--muted);">Last 30 days · GA4 Property <code style="background:rgba(255,255,255,.06);padding:2px 8px;border-radius:4px;">527222569</code></div>
+        </div>
+        <div id="gaRealtimePill" style="display:none;font-size:13px;font-weight:700;padding:6px 16px;border-radius:20px;background:rgba(0,200,120,.12);border:1px solid rgba(0,200,120,.2);color:#00c878;letter-spacing:.5px;">
+          ● <span id="gaRealtimeNum">0</span> active right now
+        </div>
+      </div>
+
+      <!-- States -->
+      <div id="gaLoading" style="text-align:center;padding:64px 0;">
+        <div style="display:inline-block;width:36px;height:36px;border:3px solid rgba(255,255,255,.1);border-top-color:#cc0000;border-radius:50%;animation:spin .7s linear infinite;"></div>
+        <div style="margin-top:16px;font-size:14px;color:var(--muted);">Loading analytics data…</div>
+      </div>
+      <div id="gaNotConfigured" style="display:none;text-align:center;padding:64px 0;">
+        <div style="font-size:48px;margin-bottom:16px;">📊</div>
+        <div style="font-size:18px;font-weight:800;color:var(--fg);margin-bottom:8px;">Analytics Not Configured</div>
+        <div style="font-size:13px;color:var(--muted);max-width:440px;margin:0 auto;line-height:1.7;" id="gaNotConfiguredMsg">Set <code>GA_PROPERTY_ID</code> and service account credentials in your <code>.env</code>.</div>
+      </div>
+      <div id="gaError" style="display:none;text-align:center;padding:64px 0;">
+        <div style="font-size:48px;margin-bottom:16px;">⚠️</div>
+        <div style="font-size:16px;font-weight:700;color:#ff5555;margin-bottom:8px;">Failed to load analytics</div>
+        <div style="font-size:13px;color:var(--muted);" id="gaErrorMsg"></div>
+      </div>
+
+      <div id="gaData" style="display:none;overflow:hidden;">
+        <!-- KPI row -->
+        <div id="gaKpis" class="ga-kpi-grid"></div>
+
+        <!-- Charts row -->
+        <div class="ga-chart-grid">
+          <div class="adm-card" style="padding:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;">Sessions & Users · Last 14 Days</div>
+            <canvas id="gaTrendChart" height="120"></canvas>
+          </div>
+          <div class="adm-card" style="padding:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;">Traffic Sources</div>
+            <canvas id="gaSourceChart" height="120"></canvas>
+          </div>
+        </div>
+
+        <div class="ga-bottom-grid">
+          <div class="adm-card" style="padding:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;">Top Pages</div>
+            <div id="gaPages"></div>
+          </div>
+          <div class="adm-card" style="padding:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;">Devices</div>
+            <canvas id="gaDeviceChart" style="max-height:150px;"></canvas>
+            <div id="gaDeviceLegend" style="margin-top:14px;"></div>
+          </div>
+          <div class="adm-card" style="padding:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;">Top Countries</div>
+            <div id="gaCountries"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Download modal -->
+<div class="dl-overlay" id="dlOverlay">
+  <div class="dl-modal">
+    <div class="dl-modal-icon" id="dlIcon"><div class="dl-spinner" id="dlSpinner"></div><svg id="dlSuccessIcon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg><svg id="dlErrorIcon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/></svg></div>
+    <div class="dl-modal-title" id="dlTitle">Exporting</div>
+    <div class="dl-modal-msg" id="dlMsg">Building PDF report…</div>
+    <div class="dl-modal-filename" id="dlFilename"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+<script>
+'use strict';
+function tick(){const e=new Date;document.getElementById('admClock').textContent=e.toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'})+' · '+e.toLocaleDateString('en-NG',{day:'2-digit',month:'short',year:'numeric'})}tick();setInterval(tick,1000);
+const sidebar=document.getElementById('admSidebar'),overlay=document.getElementById('admOverlay'),hamburger=document.getElementById('admHamburger');
+hamburger.addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('open');document.body.style.overflow=sidebar.classList.contains('open')?'hidden':''});
+overlay.addEventListener('click',()=>{sidebar.classList.remove('open');overlay.classList.remove('open');document.body.style.overflow=''});
+
+var elLoading=document.getElementById('gaLoading'),elError=document.getElementById('gaError'),elErrorMsg=document.getElementById('gaErrorMsg'),elNotCfg=document.getElementById('gaNotConfigured'),elNotCfgMsg=document.getElementById('gaNotConfiguredMsg'),elData=document.getElementById('gaData');
+var elKpis=document.getElementById('gaKpis'),elPages=document.getElementById('gaPages'),elCountries=document.getElementById('gaCountries'),elDeviceLeg=document.getElementById('gaDeviceLegend');
+var elRTPill=document.getElementById('gaRealtimePill'),elRTNum=document.getElementById('gaRealtimeNum');
+var elNavBadge=document.getElementById('analyticsRealtimeBadge');
+var trendChart=null,sourceChart=null,deviceChart=null;
+var _gaData=null;
+
+var COLORS=['#cc0000','#0055cc','#ffd700','#00b87a','#9955ff','#ff7722','#22ccdd','#ff4488'];
+
+function fmtNum(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'k';return String(n)}
+function fmtDur(s){return Math.floor(s/60)+'m '+s%60+'s'}
+function fmtDate(d){var y=d.slice(0,4),m=d.slice(4,6),dd=d.slice(6,8);return new Date(y+'-'+m+'-'+dd).toLocaleDateString('en-NG',{month:'short',day:'numeric'})}
+
+function showState(s){elLoading.style.display=s==='loading'?'':'none';elError.style.display=s==='error'?'':'none';elNotCfg.style.display=s==='uncfg'?'':'none';elData.style.display=s==='data'?'':'none'}
+
+function kpiCard(label,value,sub,color){return'<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px 18px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">'+label+'</div><div style="font-size:28px;font-weight:800;color:'+color+';line-height:1;">'+value+'</div>'+(sub?'<div style="font-size:11px;color:var(--muted);margin-top:5px;">'+sub+'</div>':'')+'</div>'}
+
+function barRow(label,value,maxVal,color){var pct=maxVal?Math.round(value/maxVal*100):0;return'<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%;">'+label+'</span><span style="color:var(--muted);">'+fmtNum(value)+'</span></div><div style="height:5px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:99px;"></div></div></div>'}
+
+function render(d){
+  _gaData=d;
+  var ov=d.overview;
+  elKpis.innerHTML=kpiCard('Sessions',fmtNum(ov.sessions),'30-day total','#cc0000')+kpiCard('Users',fmtNum(ov.users),'30-day unique','#0055cc')+kpiCard('Page Views',fmtNum(ov.pageviews),'30-day total','#ffd700')+kpiCard('Bounce Rate',ov.bounceRate+'%','lower is better',ov.bounceRate>70?'#ff5555':'#00b87a')+kpiCard('Avg Duration',fmtDur(ov.avgDuration),'per session','#9955ff');
+
+  if(trendChart)trendChart.destroy();
+  trendChart=new Chart(document.getElementById('gaTrendChart'),{type:'bar',data:{labels:d.trend.map(r=>fmtDate(r.date)),datasets:[{label:'Sessions',data:d.trend.map(r=>r.sessions),backgroundColor:'rgba(204,0,0,.7)',borderRadius:4,order:2},{label:'Users',data:d.trend.map(r=>r.users),type:'line',borderColor:'#ffd700',backgroundColor:'rgba(255,215,0,.08)',pointRadius:3,pointBackgroundColor:'#ffd700',tension:.4,fill:true,order:1}]},options:{responsive:true,interaction:{mode:'index',intersect:false},plugins:{legend:{labels:{color:'rgba(255,255,255,.6)',font:{size:11},boxWidth:10}}},scales:{x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'rgba(255,255,255,.4)',font:{size:10}},grid:{color:'rgba(255,255,255,.06)'}}}}});
+
+  if(sourceChart)sourceChart.destroy();
+  var sl=d.sources.map(r=>r.channel),sv=d.sources.map(r=>r.sessions);
+  sourceChart=new Chart(document.getElementById('gaSourceChart'),{type:'bar',data:{labels:sl,datasets:[{data:sv,backgroundColor:sl.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:5}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'rgba(255,255,255,.4)',font:{size:10}},grid:{color:'rgba(255,255,255,.06)'}},y:{ticks:{color:'rgba(255,255,255,.6)',font:{size:11}},grid:{display:false}}}}});
+
+  if(deviceChart)deviceChart.destroy();
+  var dl=d.devices.map(r=>r.device),dv=d.devices.map(r=>r.sessions);
+  deviceChart=new Chart(document.getElementById('gaDeviceChart'),{type:'doughnut',data:{labels:dl,datasets:[{data:dv,backgroundColor:COLORS.slice(0,dl.length),borderWidth:0,hoverOffset:4}]},options:{responsive:true,cutout:'68%',plugins:{legend:{display:false}}}});
+  elDeviceLeg.innerHTML=d.devices.map((r,i)=>'<div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;margin-bottom:8px;"><span style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:'+COLORS[i%COLORS.length]+';flex-shrink:0;"></span><span style="text-transform:capitalize;color:var(--fg);">'+r.device+'</span></span><span style="color:var(--muted);">'+r.pct+'%</span></div>').join('');
+
+  var mp=d.pages.length?d.pages[0].views:1;
+  elPages.innerHTML=d.pages.map(p=>barRow(p.path,p.views,mp,'#cc0000')).join('');
+  var mc=d.countries.length?d.countries[0].sessions:1;
+  elCountries.innerHTML=d.countries.map(c=>barRow(c.country,c.sessions,mc,'#0055cc')).join('');
+  showState('data');
+}
+
+function loadAnalytics(){
+  showState('loading');
+  document.getElementById('gaRefreshBtn').disabled=true;
+  fetch('/admin/analytics-data',{credentials:'same-origin'}).then(r=>r.json()).then(res=>{
+    document.getElementById('gaRefreshBtn').disabled=false;
+    if(!res.ok&&res.unconfigured){elNotCfgMsg.innerHTML=res.error||'Configure GA_PROPERTY_ID in .env';showState('uncfg');return}
+    if(!res.ok){elErrorMsg.textContent=res.error||'Unknown error';showState('error');return}
+    render(res.data);
+  }).catch(err=>{document.getElementById('gaRefreshBtn').disabled=false;elErrorMsg.textContent=err.message;showState('error')});
+}
+
+function pollRealtime(){fetch('/admin/analytics-realtime',{credentials:'same-origin'}).then(r=>r.json()).then(res=>{if(res.ok&&res.activeUsers!==null){var n=res.activeUsers;elRTNum.textContent=n;elRTPill.style.display='';if(elNavBadge){elNavBadge.style.display='';elNavBadge.textContent=n}}}).catch(()=>{})}
+
+document.getElementById('gaRefreshBtn').addEventListener('click',loadAnalytics);
+loadAnalytics();pollRealtime();setInterval(pollRealtime,30000);
+
+// ── Analytics PDF Export ──
+var dlOverlay=document.getElementById('dlOverlay'),dlIcon=document.getElementById('dlIcon'),dlSpinner=document.getElementById('dlSpinner'),dlSuccessIc=document.getElementById('dlSuccessIcon'),dlErrorIc=document.getElementById('dlErrorIcon'),dlTitle=document.getElementById('dlTitle'),dlMsg=document.getElementById('dlMsg'),dlFilename=document.getElementById('dlFilename');
+var _whiteLogo=null,_logoAspect=1;
+var _logoReady=new Promise(resolve=>{var img=new Image();img.crossOrigin='anonymous';img.onload=function(){_logoAspect=img.width/img.height;var c=document.createElement('canvas');c.width=img.width;c.height=img.height;var ctx=c.getContext('2d');ctx.drawImage(img,0,0);var d=ctx.getImageData(0,0,c.width,c.height);for(var i=0;i<d.data.length;i+=4){d.data[i]=255;d.data[i+1]=255;d.data[i+2]=255}ctx.putImageData(d,0,0);_whiteLogo=c.toDataURL('image/png');resolve()};img.onerror=resolve;img.src='/images/tsa-logo.png'});
+function fileStamp(){var d=new Date();return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0')+String(d.getSeconds()).padStart(2,'0')}
+function fmtDateLong(iso){return new Date(iso||Date.now()).toLocaleString('en-NG',{day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}
+function showDl(f){dlIcon.className='dl-modal-icon';dlSpinner.style.display='';dlSuccessIc.style.display='none';dlErrorIc.style.display='none';dlTitle.textContent='Exporting Analytics';dlMsg.textContent='Building branded PDF report…';dlFilename.textContent=f;dlOverlay.classList.add('open')}
+function showOk(f){dlIcon.className='dl-modal-icon success';dlSpinner.style.display='none';dlSuccessIc.style.display='';dlTitle.textContent='Export Complete';dlMsg.textContent='Your analytics report has been saved.';dlFilename.textContent=f;setTimeout(()=>dlOverlay.classList.remove('open'),2000)}
+function showErr(m){dlIcon.className='dl-modal-icon error';dlSpinner.style.display='none';dlErrorIc.style.display='';dlTitle.textContent='Export Failed';dlMsg.textContent=m||'Something went wrong.';dlFilename.textContent='';setTimeout(()=>dlOverlay.classList.remove('open'),2500)}
+function triggerBlob(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+
+document.getElementById('gaExportPdfBtn').addEventListener('click',function(){
+  if(!_gaData){showErr('Load analytics data first.');return}
+  var stamp=fileStamp(),filename='yw26-analytics-'+stamp+'.pdf';
+  showDl(filename);
+  var start=Date.now();
+  _logoReady.then(()=>{
+    try{
+      var jsPDF=window.jspdf.jsPDF,doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'}),pw=doc.internal.pageSize.getWidth(),ph=doc.internal.pageSize.getHeight(),generated=fmtDateLong();
+      // Header
+      var steps=80,hH=30;
+      for(var i=0;i<steps;i++){var rr=Math.round(10+i/steps*194);doc.setFillColor(rr,0,Math.max(0,40-i/steps*40));doc.rect(i*pw/steps,0,pw/steps+.5,hH,'F')}
+      if(_whiteLogo){var lh=20,lw=lh*_logoAspect;doc.addImage(_whiteLogo,'PNG',10,5,lw,lh)}
+      doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setTextColor(255,255,255);doc.text('ANALYTICS REPORT',36,14);
+      doc.setFontSize(9);doc.setTextColor(255,200,200);doc.text('IBCC Youth Week 26 · Last 30 Days',36,21);
+      doc.setFontSize(8);doc.setTextColor(255,200,200);doc.text('Generated: '+generated,pw-10,17,{align:'right'});
+      doc.setFillColor(204,0,0);doc.rect(0,hH,pw,2,'F');
+      // KPIs box
+      var ov=_gaData.overview,y=hH+8;
+      var kpis=[['Sessions',fmtNum(ov.sessions)],['Users',fmtNum(ov.users)],['Page Views',fmtNum(ov.pageviews)],['Bounce Rate',ov.bounceRate+'%'],['Avg Duration',fmtDur(ov.avgDuration)]];
+      var cw=(pw-20)/5;
+      kpis.forEach(function(k,idx){
+        var x=10+idx*cw;
+        doc.setFillColor(245,245,252);doc.setDrawColor(220,220,235);doc.setLineWidth(.3);doc.roundedRect(x,y,cw-2,20,2,2,'FD');
+        doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(120,120,150);doc.text(k[0].toUpperCase(),x+cw/2-1,y+7,{align:'center'});
+        doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(20,20,40);doc.text(k[1],x+cw/2-1,y+16,{align:'center'});
+      });
+      y+=28;
+      // Trend table
+      doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(30,30,50);doc.text('Daily Trend',10,y);y+=4;
+      doc.autoTable({head:[['Date','Sessions','Users']],body:_gaData.trend.map(r=>[fmtDate(r.date),r.sessions,r.users]),startY:y,theme:'grid',styles:{fontSize:8,cellPadding:3},headStyles:{fillColor:[30,30,55],textColor:[255,255,255],fontSize:7.5},alternateRowStyles:{fillColor:[248,248,252]},margin:{left:10,right:10},tableWidth:'auto'});
+      y=doc.lastAutoTable.finalY+8;
+      // Top pages
+      doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(30,30,50);doc.text('Top Pages',10,y);y+=4;
+      doc.autoTable({head:[['Page','Views','Users']],body:_gaData.pages.map(p=>[p.path,p.views,p.users]),startY:y,theme:'grid',styles:{fontSize:8,cellPadding:3},headStyles:{fillColor:[30,30,55],textColor:[255,255,255],fontSize:7.5},alternateRowStyles:{fillColor:[248,248,252]},margin:{left:10,right:10}});
+      y=doc.lastAutoTable.finalY+8;
+      // Sources + Devices + Countries side by side
+      var half=(pw-24)/2;
+      doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(30,30,50);doc.text('Traffic Sources',10,y);doc.text('Top Countries',14+half,y);y+=4;
+      doc.autoTable({head:[['Channel','Sessions']],body:_gaData.sources.map(s=>[s.channel,s.sessions]),startY:y,theme:'grid',styles:{fontSize:8,cellPadding:3},headStyles:{fillColor:[30,30,55],textColor:[255,255,255],fontSize:7.5},alternateRowStyles:{fillColor:[248,248,252]},margin:{left:10,right:14+half},tableWidth:half});
+      doc.autoTable({head:[['Country','Sessions']],body:_gaData.countries.map(c=>[c.country,c.sessions]),startY:y,theme:'grid',styles:{fontSize:8,cellPadding:3},headStyles:{fillColor:[30,30,55],textColor:[255,255,255],fontSize:7.5},alternateRowStyles:{fillColor:[248,248,252]},margin:{left:14+half,right:10},tableWidth:half});
+      // Footer
+      doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(150,150,170);doc.text('IBCC Youth Week 26 — Analytics Report',10,ph-8);doc.text('Page 1',pw-10,ph-8,{align:'right'});
+      var blob=doc.output('blob');
+      var wait=Math.max(0,1500-(Date.now()-start));
+      setTimeout(()=>{triggerBlob(blob,filename);showOk(filename);fetch('/admin/api/log-download',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','X-CSRF-Token':document.querySelector('meta[name="csrf-token"]').content},body:JSON.stringify({type:'PDF',dataset:'analytics',filename:filename})}).catch(()=>{})},wait);
+    }catch(err){showErr(err.message)}
+  });
+});
+</script>
+</body>
+</html>

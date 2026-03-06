@@ -1,0 +1,213 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<style>
+  /* ── about.ejs specific ── */
+  /* Quote block: left-border + large font overflows on mobile */
+  @media (max-width: 480px) {
+    .about-intro-quote {
+      font-size: clamp(22px, 6vw, 34px);
+      padding-left: 16px;
+      border-left-width: 3px;
+    }
+    .body-text { font-size: 14px; }
+    .btn-outline { font-size: 13px; padding: 10px 18px; width: 100%; text-align: center; justify-content: center; }
+    /* MV cards: hide big ghost number to save space */
+    .mv-num { display: none; }
+    .mv-body { padding: 18px 16px; }
+  }
+  /* Timeline: prevent horizontal overflow */
+  .about-tl { overflow: hidden; }
+  @media (max-width: 480px) {
+    .about-tl { padding-left: 20px; margin-top: 24px; }
+    .about-tl::before { left: 5px; }
+    .about-tl-item::before { left: -18px; width: 10px; height: 10px; }
+    .about-tl-year { font-size: 20px; }
+    .about-tl-desc { font-size: 13px; }
+    /* Pillars grid */
+    .about-pillars-grid { grid-template-columns: 1fr; gap: 12px; }
+  }
+</style>
+
+<style>
+  /* ── Shared inner-page hero ── */
+  .page-hero {
+    min-height: 0 !important;
+    padding: calc(var(--nav-h) + 64px) 0 60px !important;
+  }
+  @media (max-width: 768px) {
+    .page-hero { padding: calc(var(--nav-h) + 52px) 0 48px !important; }
+    .page-title { line-height: .88; }
+  }
+  @media (max-width: 480px) {
+    .page-hero { padding: calc(var(--nav-h) + 44px) 0 40px !important; }
+    .page-title { font-size: clamp(52px, 15vw, 80px) !important; font-weight: 900; letter-spacing: 1px; }
+    .page-hero-sub { font-size: 14px; max-width: 90vw; }
+    .eyebrow { font-size: 11px; letter-spacing: 3px; margin-bottom: 16px; }
+    .cta-banner div[style] { flex-direction: column !important; align-items: stretch !important; }
+    .cta-banner .btn-primary,
+    .cta-banner .btn-ghost { width: 100%; justify-content: center; text-align: center; }
+    .section-title { line-height: 1.05; }
+  }
+</style>
+
+
+<!-- ═══════════════ PAGE HERO ═══════════════ -->
+<section class="page-hero">
+  <div class="page-hero-bg about-bg">
+    <div class="page-hero-particles">
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+      <div class="ph-particle"></div><div class="ph-particle"></div>
+    </div>
+  </div>
+  <div class="page-hero-accent"></div>
+  <div class="container">
+    <div class="page-hero-content">
+      <span class="eyebrow reveal">Who We Are</span>
+      <h1 class="page-title reveal rd1">About <em>Us</em></h1>
+      <p class="page-hero-sub reveal rd2">The story, mission, and heart behind IBCC Youth Fellowship and 26 years of Youth Week.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ INTRO ═══════════════ -->
+<section class="section-pad">
+  <div class="container">
+    <div class="about-intro">
+      <div>
+        <blockquote class="about-intro-quote reveal">
+          "We exist to raise <em>a generation</em> sold out for God and serving their world."
+        </blockquote>
+      </div>
+      <div>
+        <p class="body-text reveal rd1">
+          The IBCC Youth Fellowship is the youth arm of The Salvation Army Ibadan Central Corps (IBCC), located in the heart of Ibadan, Oyo State, Nigeria. We are a community of young people passionate about faith, fellowship, and impact.
+        </p>
+        <p class="body-text reveal rd2">
+          Founded on the bedrock principles of The Salvation Army — Heart to God, Hand to Man — our fellowship has grown into one of the most vibrant youth communities in the Salvation Army Nigeria Territory. We believe that young people are not the church of tomorrow; they are the church of today.
+        </p>
+        <p class="body-text reveal rd3">
+          Every year, we gather for Youth Week — a celebration of faith, talent, service, and community. In 2026, we mark the 26th edition of this beloved tradition. The Youth Retreat this year was held under the theme <strong class="text-gold">"Built for Greater Impact"</strong>.
+        </p>
+        <a href="/activities" class="btn-outline reveal rd4">View Youth Retreat Programme</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MISSION / VISION / VALUES ═══════════════ -->
+<section class="values-section section-pad">
+  <div class="values-bg"></div>
+  <div class="container values-inner">
+    <span class="eyebrow reveal">Our Foundation</span>
+    <h2 class="section-title reveal rd1">Mission, Vision <span class="text-red">&amp; Values</span></h2>
+
+    <div class="mv-cards">
+      <div class="mv-card reveal rd1">
+        <div class="mv-accent red"></div>
+        <div class="mv-body">
+          <span class="mv-num">01</span>
+          <div class="mv-text">
+            <h3>Our Mission</h3>
+            <p>To evangelise, disciple, and equip young people in Ibadan and beyond to live wholehearted lives for Christ — rooted in The Salvation Army's calling to reach the lost and serve the poor.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mv-card reveal rd2">
+        <div class="mv-accent blue"></div>
+        <div class="mv-body">
+          <span class="mv-num">02</span>
+          <div class="mv-text">
+            <h3>Our Vision</h3>
+            <p>A generation of young Salvationists on fire for God — leading families, communities, and the nation with integrity, compassion, and unwavering faith in Jesus Christ.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mv-card reveal rd3">
+        <div class="mv-accent gold"></div>
+        <div class="mv-body">
+          <span class="mv-num">03</span>
+          <div class="mv-text">
+            <h3>Our Values</h3>
+            <p>Faith over fear. Community over individualism. Service over comfort. Excellence in all things. Radical inclusion — every young person belongs, is known, and is loved here.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PILLARS ═══════════════ -->
+<section class="section-pad">
+  <div class="container">
+    <span class="eyebrow reveal">What We Do</span>
+    <h2 class="section-title reveal rd1">Six <span class="text-gold">Pillars</span> of Ministry</h2>
+    <div class="about-pillars-grid">
+      <div class="feat-card reveal rd1">
+        <div class="feat-icon ri"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10h14V4z"/></svg></div>
+        <h3>Worship &amp; Prayer</h3>
+        <p>Weekly prayer meetings, Friday night vigils, and corporate worship that ushers young people into the presence of God.</p>
+      </div>
+      <div class="feat-card reveal rd2">
+        <div class="feat-icon bi"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687z"/></svg></div>
+        <h3>Bible Study</h3>
+        <p>Systematic teaching of God's Word in small groups and large gatherings, building a generation grounded in scripture.</p>
+      </div>
+      <div class="feat-card reveal rd3">
+        <div class="feat-icon gi"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg></div>
+        <h3>Mentorship</h3>
+        <p>Connecting young people with seasoned leaders for personal and spiritual development through one-on-one and group mentoring.</p>
+      </div>
+      <div class="feat-card reveal rd1">
+        <div class="feat-icon ri"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793z"/></svg></div>
+        <h3>Outreach &amp; Evangelism</h3>
+        <p>Regular street evangelism, hospital visits, school missions, and community service projects throughout Ibadan.</p>
+      </div>
+      <div class="feat-card reveal rd2">
+        <div class="feat-icon bi"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/></svg></div>
+        <h3>Arts &amp; Culture</h3>
+        <p>Drama, choir, spoken word, dance, and creative arts as powerful tools of worship and gospel communication.</p>
+      </div>
+      <div class="feat-card reveal rd3">
+        <div class="feat-icon gi"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6"/></svg></div>
+        <h3>Skill Development</h3>
+        <p>Vocational training, entrepreneurship boot camps, digital skills, and leadership workshops preparing youth for the marketplace.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TIMELINE ═══════════════ -->
+<section class="values-section section-pad">
+  <div class="values-bg"></div>
+  <div class="container values-inner">
+    <span class="eyebrow reveal">Our Journey</span>
+    <h2 class="section-title reveal rd1">26 Years of <span class="text-red">Youth Week</span></h2>
+    <p class="section-sub reveal rd2">From humble beginnings to a landmark annual event — the story of IBCC Youth Week.</p>
+    <div class="about-tl">
+      <div class="about-tl-item reveal"><div class="about-tl-year">2001</div><p class="about-tl-desc">The first Youth Week is held with fewer than 50 young people. A seed of something great is planted at Ibadan Central Corps.</p></div>
+      <div class="about-tl-item gold reveal rd1"><div class="about-tl-year">2005</div><p class="about-tl-desc">Youth Week expands to five days for the first time. Attendance surpasses 150. The sports fiesta and talent night are introduced.</p></div>
+      <div class="about-tl-item blue reveal rd2"><div class="about-tl-year">2010</div><p class="about-tl-desc">The 10th anniversary edition draws over 300 young people from across the Ibadan Division. Guest speakers from the Nigeria Territory headquarters attend.</p></div>
+      <div class="about-tl-item reveal rd1"><div class="about-tl-year">2015</div><p class="about-tl-desc">Youth Week becomes a full seven-day programme. Outreach day officially joins the schedule with teams reaching 12 communities across Ibadan.</p></div>
+      <div class="about-tl-item gold reveal rd2"><div class="about-tl-year">2020</div><p class="about-tl-desc">Youth Week 20 is held online due to COVID-19 — reaching participants across Nigeria and the diaspora for the first time via live stream.</p></div>
+      <div class="about-tl-item blue reveal rd3"><div class="about-tl-year">2024</div><p class="about-tl-desc">Youth Week 25 Silver Jubilee — the biggest edition yet. Over 500 registrations, 12 guest speakers, and a historic closing concert at IBCC grounds.</p></div>
+      <div class="about-tl-item reveal rd1"><div class="about-tl-year">2026</div><p class="about-tl-desc"><strong class="text-gold">Youth Week 26 — Built for Greater Impact.</strong> A three-day Youth Retreat marking the 26th edition. You are part of this story.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<div class="cta-banner">
+  <div class="cta-banner-bg"></div>
+  <div class="container cta-banner-inner">
+    <h2 class="reveal">Be Part of the <span class="text-gold">Story</span></h2>
+    <p class="reveal rd1">Browse the gallery and full retreat programme from Youth Week 26.</p>
+    <div class="reveal rd2" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="/gallery" class="btn-primary btn-lg">View Gallery</a>
+      <a href="/activities" class="btn-ghost btn-lg">Full Programme</a>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

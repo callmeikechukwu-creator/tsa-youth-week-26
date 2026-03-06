@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+  <title><%= title %> — IBCC Youth Week 26</title>
+  <link rel="icon" type="image/png" href="/images/tsa-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.min.css">
+  <style>
+    .acc-grid { display:grid; gap:16px; }
+    .acc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: border-color .2s;
+    }
+    .acc-card:hover { border-color: rgba(255,255,255,.14); }
+    .acc-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red), var(--blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .acc-info { flex: 1; min-width: 0; }
+    .acc-email { font-size: 14px; font-weight: 600; word-break: break-all; }
+    .acc-meta { font-size: 11px; color: var(--muted); margin-top: 2px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .acc-role {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      background: rgba(204,0,0,.15);
+      color: #ff5555;
+    }
+    .acc-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .acc-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .acc-btn:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.14); }
+    .acc-btn.del { color: #ff5555; border-color: rgba(255,60,60,.2); }
+    .acc-btn.del:hover { background: rgba(255,40,40,.1); }
+    .acc-empty { text-align: center; padding: 48px; color: var(--muted); font-size: 14px; }
+
+    /* ── Modal ── */
+    .acc-modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .acc-modal-overlay.open { display: flex; }
+    .acc-modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      width: 100%;
+      max-width: 440px;
+      padding: 28px 28px 24px;
+    }
+    .acc-modal h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .acc-field { margin-bottom: 16px; }
+    .acc-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .acc-field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-b);
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .acc-field input:focus { border-color: var(--red); }
+    .acc-field .custom-dropdown-trigger:focus { border-color: var(--red); }
+    .acc-modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+    .acc-modal-btn {
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+    }
+    .acc-modal-btn.cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .acc-modal-btn.cancel:hover { background: rgba(255,255,255,.05); }
+    .acc-modal-btn.save { background: var(--red); color: #fff; }
+    .acc-modal-btn.save:hover { background: var(--red-d); }
+    .acc-modal-btn.save:disabled { opacity: .5; cursor: not-allowed; }
+    .acc-error { color: #ff5555; font-size: 13px; margin-top: 8px; display: none; }
+    .acc-error.show { display: block; }
+    .acc-pw-row { display: flex; gap: 8px; align-items: flex-start; }
+    .acc-pw-row input { flex: 1; }
+    .acc-gen-btn {
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+    .acc-gen-btn:hover { background: rgba(255,255,255,.06); color: var(--text); }
+
+    /* ── Toast ── */
+    .acc-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      z-index: 1100;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all .3s;
+      pointer-events: none;
+    }
+    .acc-toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .acc-toast.error { border-color: rgba(255,60,60,.3); color: #ff5555; }
+
+    /* ── Delete confirm ── */
+    .del-confirm-msg { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+    .del-confirm-email { font-weight: 700; color: var(--text); }
+    .acc-modal-btn.del-btn { background: #cc0000; color: #fff; }
+    .acc-modal-btn.del-btn:hover { background: #a30000; }
+
+    @media (max-width: 600px) {
+      .acc-card { flex-wrap: wrap; }
+      .acc-actions { width: 100%; justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="adm-overlay" id="admOverlay"></div>
+
+<div class="adm-layout">
+
+  <% locals.activePage = 'accounts'; locals.regCount = locals.regCount || ''; locals.contactCount = locals.contactCount || ''; %>
+  <%- include('partials/sidebar') %>
+
+  <main class="adm-main">
+
+    <div class="adm-topbar">
+      <div class="adm-topbar-left">
+        <button class="adm-hamburger" id="admHamburger" aria-label="Toggle menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/></svg>
+        </button>
+        <h1>ACCOUNTS</h1>
+      </div>
+      <div class="adm-topbar-right">
+        <button class="btn-red" id="addAccountBtn" style="font-size:12px;padding:8px 18px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg>
+          Add Account
+        </button>
+      </div>
+    </div>
+
+    <div class="adm-content" style="padding:24px;">
+
+      <div class="acc-grid" id="accountsList">
+        <% if (accounts.length === 0) { %>
+          <div class="acc-empty">No admin accounts found.</div>
+        <% } else { %>
+          <% accounts.forEach(function(a) { %>
+            <div class="acc-card" data-id="<%= a.id %>">
+              <div class="acc-avatar"><%= a.email.charAt(0).toUpperCase() %></div>
+              <div class="acc-info">
+                <div class="acc-email"><%= a.email %></div>
+                <div class="acc-meta">
+                  <span class="acc-role"><%= a.role || 'admin' %></span>
+                  <span>Added <%= new Date(a.createdAt).toLocaleDateString('en-NG', {day:'2-digit', month:'short', year:'numeric'}) %></span>
+                </div>
+              </div>
+              <div class="acc-actions">
+                <button class="acc-btn edit-btn" data-id="<%= a.id %>" data-email="<%= a.email %>" data-role="<%= a.role || 'admin' %>">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293z"/></svg>
+                  Edit
+                </button>
+                <button class="acc-btn del" data-id="<%= a.id %>" data-email="<%= a.email %>">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/></svg>
+                  Delete
+                </button>
+              </div>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Add / Edit Modal -->
+<div class="acc-modal-overlay" id="accModal">
+  <div class="acc-modal">
+    <h3 id="accModalTitle">Add Account</h3>
+    <input type="hidden" id="accEditId" value="">
+    <div class="acc-field">
+      <label for="accEmail">Email Address</label>
+      <input type="email" id="accEmail" placeholder="admin@example.com" autocomplete="off">
+    </div>
+    <div class="acc-field">
+      <label for="accPassword">Password <span id="accPwHint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);font-size:10px;">(min 8 characters)</span></label>
+      <div class="acc-pw-row">
+        <input type="text" id="accPassword" placeholder="Enter password" autocomplete="off">
+        <button class="acc-gen-btn" id="accGenPw" type="button">Generate</button>
+      </div>
+    </div>
+    <div class="acc-field">
+      <label for="accRole">Role</label>
+      <input type="hidden" id="accRole" value="admin">
+      <div class="custom-dropdown" id="accRoleDD" data-target="accRole">
+        <button type="button" class="custom-dropdown-trigger" tabindex="0" style="padding:10px 14px;font-size:14px;background:var(--bg);border-color:var(--border);">
+          <span class="dd-text">Admin</span>
+          <svg class="dd-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>
+        </button>
+        <div class="custom-dropdown-menu" style="background:var(--bg);">
+          <div class="custom-dropdown-item selected" data-value="admin">Admin</div>
+        </div>
+      </div>
+    </div>
+    <div class="acc-error" id="accError"></div>
+    <div class="acc-modal-actions">
+      <button class="acc-modal-btn cancel" id="accCancel">Cancel</button>
+      <button class="acc-modal-btn save" id="accSave">Save Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="acc-modal-overlay" id="delModal">
+  <div class="acc-modal">
+    <h3>Delete Account</h3>
+    <div class="del-confirm-msg">
+      Are you sure you want to permanently delete the account <span class="del-confirm-email" id="delEmail"></span>?
+      This action cannot be undone.
+    </div>
+    <input type="hidden" id="delId" value="">
+    <div class="acc-error" id="delError"></div>
+    <div class="acc-modal-actions">
+      <button class="acc-modal-btn cancel" id="delCancel">Cancel</button>
+      <button class="acc-modal-btn del-btn" id="delConfirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="acc-toast" id="accToast"></div>
+
+<script>
+(function() {
+  // ── Custom dropdown init ──
+  document.querySelectorAll('.custom-dropdown').forEach(function(dd) {
+    var trigger = dd.querySelector('.custom-dropdown-trigger');
+    var textEl = trigger.querySelector('.dd-text');
+    var items = dd.querySelectorAll('.custom-dropdown-item');
+    var hiddenId = dd.dataset.target;
+    var hidden = hiddenId ? document.getElementById(hiddenId) : null;
+
+    trigger.addEventListener('click', function(e) {
+      e.preventDefault();
+      var wasOpen = dd.classList.contains('open');
+      document.querySelectorAll('.custom-dropdown.open').forEach(function(d) { d.classList.remove('open'); });
+      if (!wasOpen) dd.classList.add('open');
+    });
+
+    items.forEach(function(item) {
+      item.addEventListener('click', function() {
+        items.forEach(function(i) { i.classList.remove('selected'); });
+        item.classList.add('selected');
+        if (hidden) hidden.value = item.dataset.value;
+        textEl.textContent = item.textContent;
+        textEl.classList.remove('dd-placeholder');
+        dd.classList.remove('open');
+      });
+    });
+
+    trigger.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') dd.classList.remove('open');
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger.click(); }
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.custom-dropdown')) {
+      document.querySelectorAll('.custom-dropdown.open').forEach(function(d) { d.classList.remove('open'); });
+    }
+  });
+
+  // ── Sidebar toggle ──
+  var sidebar = document.getElementById('admSidebar');
+  var overlay = document.getElementById('admOverlay');
+  var hamburger = document.getElementById('admHamburger');
+  function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', function() { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+  overlay.addEventListener('click', closeSidebar);
+
+  // ── Toast ──
+  var toast = document.getElementById('accToast');
+  var toastTimer = null;
+  function showToast(msg, isError) {
+    clearTimeout(toastTimer);
+    toast.textContent = msg;
+    toast.className = 'acc-toast show' + (isError ? ' error' : '');
+    toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+  }
+
+  // ── Add / Edit Modal ──
+  var modal = document.getElementById('accModal');
+  var modalTitle = document.getElementById('accModalTitle');
+  var editId = document.getElementById('accEditId');
+  var emailInput = document.getElementById('accEmail');
+  var pwInput = document.getElementById('accPassword');
+  var pwHint = document.getElementById('accPwHint');
+  var roleInput = document.getElementById('accRole');
+  var roleDd = document.getElementById('accRoleDD');
+  var accError = document.getElementById('accError');
+  var saveBtn = document.getElementById('accSave');
+
+  function setRoleDropdown(val) {
+    roleInput.value = val;
+    var items = roleDd.querySelectorAll('.custom-dropdown-item');
+    var textEl = roleDd.querySelector('.dd-text');
+    items.forEach(function(i) {
+      i.classList.toggle('selected', i.dataset.value === val);
+      if (i.dataset.value === val) textEl.textContent = i.textContent;
+    });
+  }
+
+  function openAddModal() {
+    editId.value = '';
+    modalTitle.textContent = 'Add Account';
+    emailInput.value = '';
+    pwInput.value = '';
+    pwInput.placeholder = 'Enter password';
+    pwHint.textContent = '(min 8 characters)';
+    setRoleDropdown('admin');
+    accError.classList.remove('show');
+    saveBtn.textContent = 'Save Account';
+    saveBtn.disabled = false;
+    modal.classList.add('open');
+    emailInput.focus();
+  }
+
+  function openEditModal(id, email, role) {
+    editId.value = id;
+    modalTitle.textContent = 'Edit Account';
+    emailInput.value = email;
+    pwInput.value = '';
+    pwInput.placeholder = 'Leave blank to keep current';
+    pwHint.textContent = '(leave blank to keep current)';
+    setRoleDropdown(role || 'admin');
+    accError.classList.remove('show');
+    saveBtn.textContent = 'Update Account';
+    saveBtn.disabled = false;
+    modal.classList.add('open');
+    emailInput.focus();
+  }
+
+  function closeModal() { modal.classList.remove('open'); }
+
+  document.getElementById('addAccountBtn').addEventListener('click', openAddModal);
+  document.getElementById('accCancel').addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+
+  // Generate password
+  document.getElementById('accGenPw').addEventListener('click', function() {
+    fetch('/admin/api/generate-password', { credentials: 'same-origin' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { pwInput.value = d.password; })
+      .catch(function() { showToast('Failed to generate password', true); });
+  });
+
+  // Save / Update
+  saveBtn.addEventListener('click', function() {
+    var email = emailInput.value.trim();
+    var password = pwInput.value;
+    var role = roleInput.value;
+    var id = editId.value;
+
+    if (!email) { accError.textContent = 'Email is required.'; accError.classList.add('show'); return; }
+
+    if (!id && !password) { accError.textContent = 'Password is required for new accounts.'; accError.classList.add('show'); return; }
+    if (password && password.length < 8) { accError.textContent = 'Password must be at least 8 characters.'; accError.classList.add('show'); return; }
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = id ? 'Updating...' : 'Saving...';
+    accError.classList.remove('show');
+
+    var url = id ? '/admin/api/accounts/' + id : '/admin/api/accounts';
+    var method = id ? 'PUT' : 'POST';
+    var body = { email: email, role: role };
+    if (password) body.password = password;
+
+    fetch(url, {
+      method: method,
+      headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content },
+      credentials: 'same-origin',
+      body: JSON.stringify(body)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d.ok) {
+        accError.textContent = d.error || 'Something went wrong.';
+        accError.classList.add('show');
+        saveBtn.disabled = false;
+        saveBtn.textContent = id ? 'Update Account' : 'Save Account';
+        return;
+      }
+      closeModal();
+      showToast(id ? 'Account updated successfully.' : 'Account created successfully.');
+      setTimeout(function() { window.location.reload(); }, 600);
+    })
+    .catch(function() {
+      accError.textContent = 'Network error. Please try again.';
+      accError.classList.add('show');
+      saveBtn.disabled = false;
+      saveBtn.textContent = id ? 'Update Account' : 'Save Account';
+    });
+  });
+
+  // ── Edit buttons ──
+  document.querySelectorAll('.edit-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      openEditModal(btn.dataset.id, btn.dataset.email, btn.dataset.role);
+    });
+  });
+
+  // ── Delete modal ──
+  var delModal = document.getElementById('delModal');
+  var delIdInput = document.getElementById('delId');
+  var delEmailSpan = document.getElementById('delEmail');
+  var delError = document.getElementById('delError');
+  var delConfirmBtn = document.getElementById('delConfirm');
+
+  document.querySelectorAll('.acc-btn.del').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      delIdInput.value = btn.dataset.id;
+      delEmailSpan.textContent = btn.dataset.email;
+      delError.classList.remove('show');
+      delConfirmBtn.disabled = false;
+      delConfirmBtn.textContent = 'Delete';
+      delModal.classList.add('open');
+    });
+  });
+
+  document.getElementById('delCancel').addEventListener('click', function() { delModal.classList.remove('open'); });
+  delModal.addEventListener('click', function(e) { if (e.target === delModal) delModal.classList.remove('open'); });
+
+  delConfirmBtn.addEventListener('click', function() {
+    var id = delIdInput.value;
+    delConfirmBtn.disabled = true;
+    delConfirmBtn.textContent = 'Deleting...';
+    delError.classList.remove('show');
+
+    fetch('/admin/api/accounts/' + id, {
+      method: 'DELETE',
+      headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content },
+      credentials: 'same-origin'
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d.ok) {
+        delError.textContent = d.error || 'Something went wrong.';
+        delError.classList.add('show');
+        delConfirmBtn.disabled = false;
+        delConfirmBtn.textContent = 'Delete';
+        return;
+      }
+      delModal.classList.remove('open');
+      showToast('Account deleted successfully.');
+      setTimeout(function() { window.location.reload(); }, 600);
+    })
+    .catch(function() {
+      delError.textContent = 'Network error. Please try again.';
+      delError.classList.add('show');
+      delConfirmBtn.disabled = false;
+      delConfirmBtn.textContent = 'Delete';
+    });
+  });
+})();
+</script>
+</body>
+</html>
