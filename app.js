@@ -159,6 +159,12 @@ app.use('/admin', adminRouter);
 const apiRouter = require('./routes/api');
 app.use('/api', apiRouter);
 
+// ── Health check — lightweight ping endpoint for UptimeRobot ──
+// Bypasses session, rendering, and DB calls. Returns instantly.
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 // 404 — don't leak server info
 app.use((req, res) => {
   res.status(404).render('error', {
@@ -184,15 +190,19 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 // ── Connect to MongoDB, seed accounts, then start server ──
 async function start() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('[MongoDB] Connecting…');
+    await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 15000
+    });
     console.log('[MongoDB] Connected successfully');
 
     // Seed admin accounts from .env if no accounts exist yet
     const accounts = require('./lib/accounts');
     await accounts.ensureSeeded();
 
-    const server = app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
     });
 
     // ── Graceful shutdown ──

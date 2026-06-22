@@ -18,7 +18,7 @@ services:
     #   mountPath: /opt/render/project/src/data
     #   sizeGB: 1
 
-    healthCheckPath: /
+    healthCheckPath: /health
 
     envVars:
       - key: NODE_ENV
