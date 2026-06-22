@@ -5,8 +5,8 @@ services:
     region: singapore   # change to: oregon | frankfurt | ohio | virginia | singapore
     plan: free          # upgrade to 'starter' for persistent disk support
 
-    buildCommand: npm install
-    startCommand: npm start   # prestart runs build:css + build:js automatically
+    buildCommand: npm install && npm run build
+    startCommand: node app.js
 
     # ── Persistent disk — keeps data/ across deploys ──────────────────────────
     # Free plan does NOT support persistent disks.
